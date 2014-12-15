@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/facebook/facebook.iml" filepath="$PROJECT_DIR$/facebook/facebook.iml" />
       <module fileurl="file://$PROJECT_DIR$/ineed.iml" filepath="$PROJECT_DIR$/ineed.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ineed_android.iml" filepath="$PROJECT_DIR$/ineed_android.iml" />
     </modules>
   </component>
 </project>
