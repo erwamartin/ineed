@@ -1,11 +1,25 @@
 package co.erwan.ineed.ineed;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.AppEventsLogger;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.FacebookError;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.Date;
 
 
 public class MainActivity extends FragmentActivity {

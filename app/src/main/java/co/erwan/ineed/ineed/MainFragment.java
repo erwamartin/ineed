@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
 import java.util.Arrays;
@@ -35,15 +36,37 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_main, container, false);
 
+        final MainFragment _this = this;
+
         LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
-        authButton.setReadPermissions(Arrays.asList("user_likes", "user_status"));
+        authButton.setReadPermissions(Arrays.asList("user_groups"));
+        authButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
+            @Override
+            public void onUserInfoFetched(GraphUser user) {
+                if (user != null) {
+                    Log.d("LOGIN", "You are currently logged in as " + user.getName());
+                    _this.routeActivity();
+                } else {
+                    Log.d("LOGIN", "You are not logged in.");
+                }
+            }
+        });
+
 
         return view;
     }
 
+    private void routeActivity() {
+        /* TODO : Checker si l'utilisateur est nouveau */
+        Intent intent = new Intent(getActivity(), SelectGroupsActivity.class);
+        startActivity(intent);
+    }
+
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
         if (state.isOpened()) {
+            //MainActivity mainActivity = new MainActivity();
+            //mainActivity.onIndex();
             Log.i(TAG, "Logged in...");
         } else if (state.isClosed()) {
             Log.i(TAG, "Logged out...");
@@ -53,7 +76,7 @@ public class MainFragment extends Fragment {
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
+        onSessionStateChange(session, state, exception);
         }
     };
 
