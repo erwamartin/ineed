@@ -71,7 +71,7 @@ public class SelectGroupsActivity extends Activity {
 
                 View groupView = (View) groupsList.getChildAt(position - start);
                 View groupContainer = groupView.findViewById(R.id.group_container);
-                groupContainer.setBackgroundColor(!isSelected ? Color.argb(65, 60, 138, 36) : Color.WHITE);
+                groupContainer.setBackgroundColor(!isSelected ? Color.argb(65, 60, 138, 36) : getResources().getColor(R.color.grey_background));
 
                 Log.d("CLICK", groups.get(position).getName());
             }
@@ -91,7 +91,7 @@ public class SelectGroupsActivity extends Activity {
         TextView user_firstname = (TextView) findViewById(R.id.user_firstname);
         user_firstname.setText(current_user.getFirstname());
 
-        new DownloadImageTask((ImageView) findViewById(R.id.user_picture))
+        new DownloadImageTask((ImageView) findViewById(R.id.user_picture), true)
                 .execute(current_user.getPicture());
     }
 
