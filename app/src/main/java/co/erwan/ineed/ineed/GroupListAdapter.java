@@ -3,6 +3,7 @@ package co.erwan.ineed.ineed;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,14 +36,13 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
         groupName.setText(groups[position].getName());
 
         TextView countMembers = (TextView) rowView.findViewById(R.id.count_members);
-        countMembers.setText(groups[position].getCountMembers().toString());
+        Integer countMembersValue = groups[position].getCountMembers();
 
-        String coverUrl = groups[position].getCoverUrl();
-        Log.d("coverUrl", coverUrl);
-        if (coverUrl != null && !coverUrl.equals("")) {
-            new DownloadImageTask((ImageView) rowView.findViewById(R.id.group_cover))
-                    .execute(coverUrl);
-        }
+        Integer stringId = countMembersValue > 1 ? R.string.count_members_string_plurar : R.string.count_members_string_singular;
+        countMembers.setText(countMembersValue.toString() + " " + getContext().getResources().getString(stringId));
+
+        View groupContainer = rowView.findViewById(R.id.group_container);
+        groupContainer.setBackgroundColor(groups[position].getSelected() ? Color.argb(65, 60, 138, 36) : Color.WHITE);
 
         return rowView;
     }
@@ -50,30 +50,5 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
     public GroupListAdapter(Context context, Group[] groups) {
         super(context, R.layout.activity_select_groups, groups);
         this.groups = groups;
-    }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
     }
 }

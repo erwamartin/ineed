@@ -9,14 +9,14 @@ import java.util.ArrayList;
 public class Group implements Serializable {
     private String id;
     private String name;
-    private String coverUrl;
     private ArrayList<User> members;
+    private Boolean selected;
 
 
     public Group(String id, String name){
         this.id = id;
         this.name = name;
-        this.coverUrl = "";
+        this.selected = false;
     }
 
     public String getId() {
@@ -29,9 +29,9 @@ public class Group implements Serializable {
 
     public void setName(String name) { this.name = name; }
 
-    public String getCoverUrl() { return coverUrl; }
+    public Boolean getSelected() { return selected; }
 
-    public void setCoverUrl(String coverUrl) { this.coverUrl = coverUrl; }
+    public void setSelected(Boolean selected) { this.selected = selected; }
 
     public Integer getCountMembers() { return members == null ? 0 : members.size(); }
 

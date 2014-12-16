@@ -8,14 +8,8 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="0.25">
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="200dp"
-            android:id="@+id/group_cover"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
+        android:layout_weight="0.25"
+        android:id="@+id/group_container" >
 
         <TextView
             android:layout_width="fill_parent"
@@ -30,13 +24,15 @@
             android:layout_height="fill_parent">
 
             <TextView
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="0 member"
+                android:text="0"
                 android:id="@+id/count_members"
                 android:layout_marginTop="10dp" />
         </RelativeLayout>
+
+
 
     </LinearLayout>
 
