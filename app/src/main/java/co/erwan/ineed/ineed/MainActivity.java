@@ -1,6 +1,8 @@
 package co.erwan.ineed.ineed;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.app.FragmentActivity;
@@ -9,12 +11,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.AppEventsLogger;
+import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.FacebookError;
+import com.facebook.model.GraphObject;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,6 +34,8 @@ import java.util.Date;
 public class MainActivity extends FragmentActivity {
 
     private MainFragment mainFragment;
+    private static final String TAG = MainFragment.class.getSimpleName();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

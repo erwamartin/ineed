@@ -1,14 +1,18 @@
 package co.erwan.ineed.ineed;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
@@ -16,6 +20,7 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +28,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import co.erwan.ineed.ineed.Helpers.DownloadImageTask;
 
 /**
  * Created by erwanmartin on 15/12/2014.
@@ -34,9 +41,12 @@ public class SelectGroupsActivity extends Activity {
     private List<Group> groups;
     private GroupListAdapter groupsAdapter;
     private ListView groupsList;
+    private UserActions userActions;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        userActions = new UserActions(this);
 
         groups = new ArrayList<Group>();
 
@@ -67,7 +77,68 @@ public class SelectGroupsActivity extends Activity {
             }
         });
 
+        userActions = new UserActions(this);
+        this.getUserData();
+
         this.getUserGroups();
+    }
+
+    public void refreshUserData(){
+        User current_user = userActions.getCurrentUser();
+
+        Log.d("current_user", current_user.toString());
+
+        TextView user_firstname = (TextView) findViewById(R.id.user_firstname);
+        user_firstname.setText(current_user.getFirstname());
+
+        new DownloadImageTask((ImageView) findViewById(R.id.user_picture))
+                .execute(current_user.getPicture());
+    }
+
+    protected void getUserData() {
+        Session session = Session.getActiveSession();
+
+        Bundle params = new Bundle();
+        params.putString("fields", "id,first_name,last_name,name,picture");
+
+        final SelectGroupsActivity _this = this;
+
+        new Request(
+                session,
+                "/me",
+                params,
+                HttpMethod.GET,
+                new Request.Callback() {
+                    public JSONObject onCompleted(Response response) {
+                        GraphObject graphObject = response.getGraphObject();
+
+                        Log.d("graphObjectUSER", graphObject.getProperty("id").toString());
+
+                        FacebookRequestError error = response.getError();
+
+                        if (error == null) {
+
+                            User current_user = new User(Long.parseLong(graphObject.getProperty("id").toString()), graphObject.getProperty("name").toString());
+                            current_user.setFirstname(graphObject.getProperty("first_name").toString());
+
+                            JSONObject json_picture = (JSONObject) graphObject.getProperty("picture");
+                            try {
+                                JSONObject picture_data = json_picture.getJSONObject("data");
+                                current_user.setPicture(picture_data.getString("url"));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } finally {
+                                userActions.setCurrentUser(current_user);
+                                _this.refreshUserData();
+                            }
+
+                        }
+
+                        return null;
+                    }
+                }
+        ).executeAsync();
     }
 
     protected void addItemListGroups(Group group) {
@@ -166,7 +237,7 @@ public class SelectGroupsActivity extends Activity {
                                 try {
                                     JSONObject graphMember = jArray.getJSONObject(i);
 
-                                    usersOfGroup.add(new User(graphMember.getInt("id"), graphMember.getString("name")));
+                                    usersOfGroup.add(new User(graphMember.getLong("id"), graphMember.getString("name")));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
