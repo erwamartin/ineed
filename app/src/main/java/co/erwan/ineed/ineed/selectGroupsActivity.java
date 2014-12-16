@@ -125,13 +125,57 @@ public class SelectGroupsActivity extends Activity {
 
                         if (error == null) {
 
-                            addItemListGroups(new Group(groupData.getProperty("id").toString(), groupData.getProperty("name").toString()));
+                            addGroupMembers(new Group(groupData.getProperty("id").toString(), groupData.getProperty("name").toString()));
 
                         } else {
                             String message = "Error getting request info";
                             Log.e(TAG, message);
                         }
                        return null;
+                    }
+                }
+        ).executeAsync();
+    }
+
+    protected void addGroupMembers(final Group group) {
+        Session session = Session.getActiveSession();
+
+        new Request(
+                session,
+                "/" + group.getId() + "/members",
+                null,
+                HttpMethod.GET,
+                new Request.Callback() {
+                    public JSONObject onCompleted(Response response) {
+                        GraphObject graphObject = response.getGraphObject();
+
+                        FacebookRequestError error = response.getError();
+
+                        if (error == null) {
+
+                            JSONArray jArray = (JSONArray)graphObject.getProperty("data");
+
+                            ArrayList<User> usersOfGroup = new ArrayList<User>();
+
+                            for(int i=0;i<jArray.length();i++) {
+                                try {
+                                    JSONObject graphMember = jArray.getJSONObject(i);
+
+                                    usersOfGroup.add(new User(graphMember.getInt("id"), graphMember.getString("name")));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            group.setMembers(usersOfGroup);
+
+                            addItemListGroups(group);
+
+                        } else {
+                            String message = "Error getting request info";
+                            Log.e(TAG, message);
+                        }
+                        return null;
                     }
                 }
         ).executeAsync();

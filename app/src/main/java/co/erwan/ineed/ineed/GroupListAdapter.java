@@ -20,7 +20,7 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
         LayoutInflater inflater = (LayoutInflater)
                 getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        int viewLayout = R.layout.activity_single_group;
+        int viewLayout = R.layout.item_list_groups;
 
         View rowView = inflater.inflate(viewLayout, parent, false);
 

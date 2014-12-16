@@ -1,6 +1,7 @@
 package co.erwan.ineed.ineed;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by erwanmartin on 15/12/2014.
@@ -8,6 +9,7 @@ import java.io.Serializable;
 public class Group implements Serializable {
     private String id;
     private String name;
+    private ArrayList<User> members;
 
 
     public Group(String id, String name){
@@ -27,6 +29,10 @@ public class Group implements Serializable {
 
     public void setName(String name) { this.name = name; }
 
-    public Integer getCountMembers() { return 20; }
+    public Integer getCountMembers() { return members == null ? 0 : members.size(); }
+
+    public ArrayList<User> getMembers() { return members; }
+
+    public void setMembers(ArrayList<User> members) { this.members = members; }
 }
 
