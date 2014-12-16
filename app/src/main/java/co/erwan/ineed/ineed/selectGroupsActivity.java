@@ -62,31 +62,44 @@ public class SelectGroupsActivity extends Activity {
 
         final SelectGroupsActivity _this = this;
 
+        Bundle params = new Bundle();
+        params.putString("fields", "groups{id,name,cover}");
+
         new Request(
                 session,
-                "/me/groups",
-                null,
+                "/me",
+                params,
                 HttpMethod.GET,
                 new Request.Callback() {
                     public JSONObject onCompleted(Response response) {
                         GraphObject graphObject = response.getGraphObject();
+
+                        Log.d("graphObjectGROUPS", response.toString());
 
                         //GraphObjectList<GraphObject> data = graphObject.getPropertyAsList("data", GraphObject.class);
                         //Log.d("Groups", data.toString());
 
                         FacebookRequestError error = response.getError();
 
-                        if (graphObject.getProperty("data") != null) {
+                        if (graphObject.getProperty("groups") != null) {
                             try {
                                 // Get the data, parse info to get the key/value info
-                                JSONArray jArray = (JSONArray)graphObject.getProperty("data");
+                                JSONObject groups_data = (JSONObject)graphObject.getProperty("groups");
+                                JSONArray jArray = groups_data.getJSONArray("data");
 
                                 for(int i=0;i<jArray.length();i++){
-                                    JSONObject json_data = jArray.getJSONObject(i);
+                                    JSONObject groupData = jArray.getJSONObject(i);
 
-                                    String groupId = json_data.getString("id");
+                                    //addGroupData(groupId);
 
-                                    addGroupData(groupId);
+                                    Group group = new Group(groupData.getString("id"), groupData.getString("name").toString());
+
+                                    if (groupData.has("cover")) {
+                                        JSONObject cover_data = groupData.getJSONObject("cover");
+                                        Log.d("cover_data", cover_data.toString());
+                                        group.setCoverUrl(cover_data.getString("source"));
+                                    }
+                                    addGroupMembers(group);
 
                                     //addItemListGroups(new Group(json_data.getInt("id"), json_data.getString("name")));
                                }
@@ -102,36 +115,6 @@ public class SelectGroupsActivity extends Activity {
                             Log.e(TAG, message);
                         }
                         return null;
-                    }
-                }
-        ).executeAsync();
-    }
-
-    protected void addGroupData(String groupId) {
-        Session session = Session.getActiveSession();
-
-        new Request(
-                session,
-                "/" + groupId,
-                null,
-                HttpMethod.GET,
-                new Request.Callback() {
-                    public JSONObject onCompleted(Response response) {
-                        GraphObject groupData = response.getGraphObject();
-
-                        Log.d("graphObject", groupData.toString());
-
-                        FacebookRequestError error = response.getError();
-
-                        if (error == null) {
-
-                            addGroupMembers(new Group(groupData.getProperty("id").toString(), groupData.getProperty("name").toString()));
-
-                        } else {
-                            String message = "Error getting request info";
-                            Log.e(TAG, message);
-                        }
-                       return null;
                     }
                 }
         ).executeAsync();
