@@ -1,5 +1,7 @@
 package co.erwan.ineed.ineed;
 
+import java.util.ArrayList;
+
 /**
  * Created by erwanmartin on 16/12/2014.
  */
@@ -11,6 +13,7 @@ public class User {
     private String firstname;
     private String picture;
 
+    private ArrayList<Group> selectedGroups;
 
     public User(Long id, String name){
         this.id = id;
@@ -36,4 +39,8 @@ public class User {
     public String getPicture() { return picture; }
 
     public void setPicture(String picture) { this.picture = picture; }
+
+    public ArrayList<Group> getSelectedGroups() { return selectedGroups; }
+
+    public void setSelectedGroups(ArrayList<Group> selectedGroups) { this.selectedGroups = selectedGroups; }
 }

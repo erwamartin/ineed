@@ -41,50 +41,12 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="false"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout"
-        android:layout_below="@+id/profil_infos_container"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15sp"
-        android:background="@drawable/grey_border_top">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:layout_gravity="center_horizontal"
-            android:layout_below="@+id/linearLayout"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="false"
-            android:text="@string/add_groups_instruction" />
-    </LinearLayout>
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:id="@+id/groupsList"
         android:scrollingCache="false"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/linearLayout"
-        android:layout_above="@+id/next_step_button" />
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/next_step"
-        android:id="@+id/next_step_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:textColor="@android:color/white"
-        android:background="@color/mazarine_button"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp" />
+        android:layout_below="@+id/profil_infos_container" />
 
 </RelativeLayout>

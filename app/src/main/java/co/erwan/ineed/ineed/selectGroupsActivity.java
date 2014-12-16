@@ -10,9 +10,11 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
@@ -42,42 +44,57 @@ public class SelectGroupsActivity extends Activity {
     private GroupListAdapter groupsAdapter;
     private ListView groupsList;
     private UserActions userActions;
+    private User currentUser;
+    private ArrayList<Group> selectedGroups;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userActions = new UserActions(this);
-
         groups = new ArrayList<Group>();
+        selectedGroups = new ArrayList<Group>();
 
         setContentView(R.layout.activity_select_groups);
 
+        userActions = new UserActions(this);
         groupsList = (ListView) findViewById(R.id.groupsList);
 
         groupsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                /*Intent intent = new Intent(MainActivity.this, SendMessage.class);
-                String message = "abc";
-                intent.putExtra(EXTRA_MESSAGE, message);
-                startActivity(intent);*/
-                Log.d("CLICK", id + "");
-                Group currentGroup = groups.get(position);
-                Boolean isSelected = currentGroup.getSelected();
-                currentGroup.setSelected(! isSelected);
+            Group currentGroup = groups.get(position);
+            Boolean isSelected = currentGroup.getSelected();
+            currentGroup.setSelected(! isSelected);
 
-                int start = groupsList.getFirstVisiblePosition();
+            selectedGroups.add(currentGroup);
 
-                View groupView = (View) groupsList.getChildAt(position - start);
-                View groupContainer = groupView.findViewById(R.id.group_container);
-                groupContainer.setBackgroundColor(!isSelected ? Color.argb(65, 60, 138, 36) : getResources().getColor(R.color.grey_background));
+            int start = groupsList.getFirstVisiblePosition();
 
-                Log.d("CLICK", groups.get(position).getName());
+            View groupView = (View) groupsList.getChildAt(position - start);
+            View groupContainer = groupView.findViewById(R.id.group_container);
+            groupContainer.setBackgroundColor(!isSelected ? Color.argb(65, 60, 138, 36) : getResources().getColor(R.color.grey_background));
+
+            Log.d("CLICK", groups.get(position).getName());
+
+
             }
         });
 
-        userActions = new UserActions(this);
+        Button nextStepButton = (Button)findViewById(R.id.next_step_button);
+        nextStepButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+            currentUser.setSelectedGroups(selectedGroups);
+            userActions.setCurrentUser(currentUser);
+            //Toast.makeText(SelectGroupsActivity.this, "NEXT", Toast.LENGTH_SHORT).show();
+            Intent listNeedsActivity = new Intent(SelectGroupsActivity.this, ListNeedsActivity.class);
+            startActivity(listNeedsActivity);
+            }
+
+        });
+
         this.getUserData();
 
         this.getUserGroups();
@@ -91,7 +108,7 @@ public class SelectGroupsActivity extends Activity {
         TextView user_firstname = (TextView) findViewById(R.id.user_firstname);
         user_firstname.setText(current_user.getFirstname());
 
-        new DownloadImageTask((ImageView) findViewById(R.id.user_picture), true)
+        new DownloadImageTask((ImageView) findViewById(R.id.user_picture))
                 .execute(current_user.getPicture());
     }
 
@@ -118,18 +135,19 @@ public class SelectGroupsActivity extends Activity {
 
                         if (error == null) {
 
-                            User current_user = new User(Long.parseLong(graphObject.getProperty("id").toString()), graphObject.getProperty("name").toString());
-                            current_user.setFirstname(graphObject.getProperty("first_name").toString());
+                            User newUser = new User(Long.parseLong(graphObject.getProperty("id").toString()), graphObject.getProperty("name").toString());
+                            newUser.setFirstname(graphObject.getProperty("first_name").toString());
 
                             JSONObject json_picture = (JSONObject) graphObject.getProperty("picture");
                             try {
                                 JSONObject picture_data = json_picture.getJSONObject("data");
-                                current_user.setPicture(picture_data.getString("url"));
+                                newUser.setPicture(picture_data.getString("url"));
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             } finally {
-                                userActions.setCurrentUser(current_user);
+                                currentUser = newUser;
+                                userActions.setCurrentUser(newUser);
                                 _this.refreshUserData();
                             }
 
