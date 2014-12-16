@@ -120,18 +120,18 @@ public class FacebookAppLinkResolver implements AppLinkResolver {
                 null, /* HttpMethod */
                 new Request.Callback() { /* Callback */
                     @Override
-                    public void onCompleted(Response response) {
+                    public JSONObject onCompleted(Response response) {
                         FacebookRequestError error = response.getError();
                         if (error != null) {
                             taskCompletionSource.setError(error.getException());
-                            return;
+                            return null;
                         }
 
                         GraphObject responseObject = response.getGraphObject();
                         JSONObject responseJson = responseObject != null ? responseObject.getInnerJSONObject() : null;
                         if (responseJson == null) {
                             taskCompletionSource.setResult(appLinkResults);
-                            return;
+                            return responseJson;
                         }
 
                         for (Uri uri : urisToRequest) {
@@ -171,6 +171,7 @@ public class FacebookAppLinkResolver implements AppLinkResolver {
                         }
 
                         taskCompletionSource.setResult(appLinkResults);
+                        return responseJson;
                     }
                 });
 

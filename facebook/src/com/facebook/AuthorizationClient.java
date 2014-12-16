@@ -366,7 +366,7 @@ class AuthorizationClient implements Serializable {
 
         Request.Callback meCallback = new Request.Callback() {
             @Override
-            public void onCompleted(Response response) {
+            public JSONObject onCompleted(Response response) {
                 try {
                     GraphUser user = response.getGraphObjectAs(GraphUser.class);
                     if (user != null) {
@@ -374,6 +374,7 @@ class AuthorizationClient implements Serializable {
                     }
                 } catch (Exception ex) {
                 }
+                return null;
             }
         };
 
@@ -387,7 +388,7 @@ class AuthorizationClient implements Serializable {
         Request requestCurrentTokenPermissions = createGetPermissionsRequest(validateSameFbidAsToken);
         requestCurrentTokenPermissions.setCallback(new Request.Callback() {
             @Override
-            public void onCompleted(Response response) {
+            public JSONObject onCompleted(Response response) {
                 try {
                     Session.PermissionsPair permissionsPair = Session.handlePermissionResponse(response);
                     if (permissionsPair != null) {
@@ -396,6 +397,7 @@ class AuthorizationClient implements Serializable {
                     }
                 } catch (Exception ex) {
                 }
+                return null;
             }
         });
 

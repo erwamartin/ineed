@@ -16,7 +16,6 @@
 
 package com.facebook;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.*;
 import android.content.pm.ResolveInfo;
@@ -609,7 +608,7 @@ public class Session implements Serializable {
         Request request = new Request(this, "me/permissions");
         request.setCallback(new Request.Callback() {
             @Override
-            public void onCompleted(Response response) {
+            public JSONObject onCompleted(Response response) {
                 PermissionsPair permissionsPair = handlePermissionResponse(response);
                 if (permissionsPair != null) {
                     // Update our token with the refreshed permissions
@@ -619,6 +618,7 @@ public class Session implements Serializable {
                         postStateChange(state, SessionState.OPENED_TOKEN_UPDATED, null);
                     }
                 }
+                return null;
             }
         });
         request.executeAsync();

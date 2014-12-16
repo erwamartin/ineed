@@ -885,8 +885,9 @@ public class AppEventsLogger {
 
         postRequest.setCallback(new Request.Callback() {
             @Override
-            public void onCompleted(Response response) {
+            public JSONObject onCompleted(Response response) {
                 handleResponse(accessTokenAppId, postRequest, response, sessionEventsState, flushState);
+                return null;
             }
         });
 

@@ -276,10 +276,11 @@ public class Request {
     public static Request newMeRequest(Session session, final GraphUserCallback callback) {
         Callback wrapper = new Callback() {
             @Override
-            public void onCompleted(Response response) {
+            public JSONObject onCompleted(Response response) {
                 if (callback != null) {
                     callback.onCompleted(response.getGraphObjectAs(GraphUser.class), response);
                 }
+                return null;
             }
         };
         return new Request(session, ME, null, null, wrapper);
@@ -297,10 +298,11 @@ public class Request {
     public static Request newMyFriendsRequest(Session session, final GraphUserListCallback callback) {
         Callback wrapper = new Callback() {
             @Override
-            public void onCompleted(Response response) {
+            public JSONObject onCompleted(Response response) {
                 if (callback != null) {
                     callback.onCompleted(typedListFromResponse(response, GraphUser.class), response);
                 }
+                return null;
             }
         };
         return new Request(session, MY_FRIENDS, null, null, wrapper);
@@ -417,10 +419,11 @@ public class Request {
 
         Callback wrapper = new Callback() {
             @Override
-            public void onCompleted(Response response) {
+            public JSONObject onCompleted(Response response) {
                 if (callback != null) {
                     callback.onCompleted(typedListFromResponse(response, GraphPlace.class), response);
                 }
+                return null;
             }
         };
 
@@ -2345,7 +2348,7 @@ public class Request {
          * @param response
          *            the Response of this request, which may include error information if the request was unsuccessful
          */
-        void onCompleted(Response response);
+        JSONObject onCompleted(Response response);
     }
 
     /**

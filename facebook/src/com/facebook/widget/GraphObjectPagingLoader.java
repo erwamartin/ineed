@@ -89,8 +89,9 @@ class GraphObjectPagingLoader<T extends GraphObject> extends Loader<SimpleGraphO
 
             currentRequest.setCallback(new Request.Callback() {
                 @Override
-                public void onCompleted(Response response) {
+                public org.json.JSONObject onCompleted(Response response) {
                     requestCompleted(response);
+                    return null;
                 }
             });
 
@@ -130,8 +131,9 @@ class GraphObjectPagingLoader<T extends GraphObject> extends Loader<SimpleGraphO
         currentRequest = request;
         currentRequest.setCallback(new Request.Callback() {
             @Override
-            public void onCompleted(Response response) {
+            public org.json.JSONObject onCompleted(Response response) {
                 requestCompleted(response);
+                return null;
             }
         });
 

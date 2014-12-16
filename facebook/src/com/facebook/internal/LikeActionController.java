@@ -1312,13 +1312,14 @@ public class LikeActionController {
             request.setVersion(ServerProtocol.GRAPH_API_VERSION);
             request.setCallback(new Request.Callback() {
                 @Override
-                public void onCompleted(Response response) {
+                public JSONObject onCompleted(Response response) {
                     error = response.getError();
                     if (error != null) {
                         processError(error);
                     } else {
                         processSuccess(response);
                     }
+                    return null;
                 }
             });
         }
