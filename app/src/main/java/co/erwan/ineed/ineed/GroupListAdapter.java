@@ -1,19 +1,12 @@
 package co.erwan.ineed.ineed;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.io.InputStream;
 
 /**
  * Created by erwanmartin on 15/12/2014.
@@ -28,7 +21,7 @@ public class GroupListAdapter extends ArrayAdapter<Group> {
         LayoutInflater inflater = (LayoutInflater)
                 getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        int viewLayout = R.layout.item_list_groups;
+        int viewLayout = R.layout.view_group_select_groups;
 
         View rowView = inflater.inflate(viewLayout, parent, false);
 
