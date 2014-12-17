@@ -9,6 +9,8 @@
     <string name="next_step">PASSER À L\'ÉTAPE SUIVANTE</string>
     <string name="count_members_string_singular">membre</string>
     <string name="count_members_string_plurar">membres</string>
+    <string name="count_needs_string_singular">annonce</string>
+    <string name="count_needs_string_plurar">annonces</string>
     <string name="add_groups_instruction">Choisissez les groupes dont vous souhaitez suivre les annonces</string>
 
 </resources>

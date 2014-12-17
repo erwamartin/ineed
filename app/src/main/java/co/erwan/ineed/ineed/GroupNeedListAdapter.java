@@ -7,11 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import co.erwan.ineed.ineed.Helpers.DownloadImageTask;
 
 /**
  * Created by erwanmartin on 16/12/2014.
@@ -66,16 +69,23 @@ public class GroupNeedListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 
-        String groupName = (String) getGroup(groupPosition).getName();
+        String groupNameValue = (String) getGroup(groupPosition).getName();
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.view_header_need_list_needs, null);
         }
 
-        TextView lblListHeader = (TextView) convertView.findViewById(R.id.group_name);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(groupName);
+        TextView groupName = (TextView) convertView.findViewById(R.id.group_name);
+        groupName.setTypeface(null, Typeface.BOLD);
+        groupName.setText(groupNameValue);
+
+        Integer countNeedsValue = getChildrenCount(groupPosition);
+
+        Integer stringId = countNeedsValue > 1 ? R.string.count_needs_string_plurar : R.string.count_needs_string_singular;
+
+        TextView countNeeds = (TextView) convertView.findViewById(R.id.count_needs);
+        countNeeds.setText(countNeedsValue.toString() + " " + context.getResources().getString(stringId));
 
         return convertView;
     }
@@ -83,7 +93,8 @@ public class GroupNeedListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String needContent = (String) getChild(groupPosition, childPosition).getContent();
+        final String needContentValue = (String) getChild(groupPosition, childPosition).getContent();
+        final User user = (User) getChild(groupPosition, childPosition).getUser();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
@@ -91,9 +102,15 @@ public class GroupNeedListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.view_need_list_needs, null);
         }
 
-        TextView needName = (TextView) convertView.findViewById(R.id.need_name);
+        TextView needContent = (TextView) convertView.findViewById(R.id.need_content);
+        needContent.setText(needContentValue);
 
-        needName.setText(needContent);
+        TextView user_firstname = (TextView) convertView.findViewById(R.id.user_firstname);
+        user_firstname.setText(user.getFirstname());
+
+        new DownloadImageTask((ImageView) convertView.findViewById(R.id.user_picture))
+                .execute(user.getPicture());
+
         return convertView;
     }
 

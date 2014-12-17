@@ -66,7 +66,8 @@ public class SelectGroupsActivity extends Activity {
             Boolean isSelected = currentGroup.getSelected();
             currentGroup.setSelected(! isSelected);
 
-            selectedGroups.add(currentGroup);
+            if (! isSelected)   selectedGroups.add(currentGroup);
+            else                selectedGroups.remove(currentGroup);
 
             int start = groupsList.getFirstVisiblePosition();
 
@@ -88,7 +89,6 @@ public class SelectGroupsActivity extends Activity {
 
             currentUser.setSelectedGroups(selectedGroups);
             userActions.setCurrentUser(currentUser);
-            //Toast.makeText(SelectGroupsActivity.this, "NEXT", Toast.LENGTH_SHORT).show();
             Intent listNeedsActivity = new Intent(SelectGroupsActivity.this, ListNeedsActivity.class);
             startActivity(listNeedsActivity);
             }
