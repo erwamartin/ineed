@@ -2,4 +2,8 @@
 <resources>
     <color name="mazarine_button">#34495E</color>
     <color name="grey_background">#EBEFF0</color>
+    <color name="green_selection">#7AAF62</color>
+    <color name="grey_item">#929AA3</color>
+    <color name="pair_item">#62CEB9</color>
+    <color name="impair_item">#E8A66A</color>
 </resources>

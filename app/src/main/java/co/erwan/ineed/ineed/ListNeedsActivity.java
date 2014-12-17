@@ -129,7 +129,12 @@ public class ListNeedsActivity extends Activity {
 
                             for (int j = 0, lenj = jsonNeeds.length(); j < lenj; j++) {
                                 JSONObject jsonNeed = (JSONObject)jsonNeeds.get(j);
-                                Need newNeed = new Need(jsonNeed.getString("idItem"), jsonNeed.getString("message"), currentUser);
+
+                                User user = new User();
+                                user.setFirstname(jsonNeed.getString("firstname"));
+                                user.setPicture(jsonNeed.getString("picture"));
+
+                                Need newNeed = new Need(jsonNeed.getString("idItem"), jsonNeed.getString("message"), user);
                                 needList.add(newNeed);
                             }
 

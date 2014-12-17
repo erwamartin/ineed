@@ -40,13 +40,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Manu"
                 android:layout_marginLeft="20dp"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/need_content"
@@ -54,8 +53,6 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Besoin de sucre"
                 android:layout_marginLeft="20dp"

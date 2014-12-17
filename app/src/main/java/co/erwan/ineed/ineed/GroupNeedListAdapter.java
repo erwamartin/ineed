@@ -2,6 +2,7 @@ package co.erwan.ineed.ineed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,8 +80,10 @@ public class GroupNeedListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.view_header_need_list_needs, null);
         }
 
+        View groupContainer = convertView.findViewById(R.id.group_container);
+        groupContainer.setBackgroundColor(groupPosition % 2 == 0 ? context.getResources().getColor(R.color.pair_item) : context.getResources().getColor(R.color.impair_item));
+
         TextView groupName = (TextView) convertView.findViewById(R.id.group_name);
-        groupName.setTypeface(null, Typeface.BOLD);
         groupName.setText(groupNameValue);
 
         Integer countNeedsValue = getChildrenCount(groupPosition);

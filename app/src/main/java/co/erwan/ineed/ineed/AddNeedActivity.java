@@ -13,6 +13,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -101,29 +102,38 @@ public class AddNeedActivity extends Activity {
                 EditText needContent = (EditText)findViewById(R.id.need_content);
                 String needContentValue = needContent.getText().toString();
 
-                JSONObject jsonParams = new JSONObject();
+                if (needContentValue.length() > 5) {
 
-                try {
+                    if (selectedGroups.size() > 0) {
 
-                    jsonParams.put("user",currentUser.getId().toString());
-                    jsonParams.put("message",needContentValue);
+                        JSONObject jsonParams = new JSONObject();
 
-                    JSONArray jsonGroups = new JSONArray();
+                        try {
 
-                    for (Group g : selectedGroups) {
-                        jsonGroups.put(g.getId().toString());
+                            jsonParams.put("user", currentUser.getId().toString());
+                            jsonParams.put("message", needContentValue);
+
+                            JSONArray jsonGroups = new JSONArray();
+
+                            for (Group g : selectedGroups) {
+                                jsonGroups.put(g.getId().toString());
+                            }
+
+                            jsonParams.put("group", jsonGroups);
+
+                            addNeedAPI(jsonParams);
+                            Log.d("jsonParams", jsonParams.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        Toast.makeText(AddNeedActivity.this, "Vous devez choisir au moins un groupe", Toast.LENGTH_LONG).show();
                     }
 
-                    jsonParams.put("group", jsonGroups);
-
-                    addNeedAPI(jsonParams);
-                    Log.d("jsonParams", jsonParams.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } else {
+                    Toast.makeText(AddNeedActivity.this, "Veuillez écrire une annonce", Toast.LENGTH_LONG).show();
                 }
-
-                Intent listNeedsActivity = new Intent(AddNeedActivity.this, ListNeedsActivity.class);
-                startActivity(listNeedsActivity);
             }
 
         });
@@ -138,6 +148,9 @@ public class AddNeedActivity extends Activity {
             public void onResponse(JSONObject response) {
                 // TODO Auto-generated method stub
                 Log.d("addNeedAPI", response.toString());
+                Toast.makeText(AddNeedActivity.this, "Votre annonce a été publiée", Toast.LENGTH_LONG).show();
+                Intent listNeedsActivity = new Intent(AddNeedActivity.this, ListNeedsActivity.class);
+                startActivity(listNeedsActivity);
             }
         }, new com.android.volley.Response.ErrorListener() {
 

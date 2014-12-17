@@ -81,13 +81,7 @@ public class SelectGroupsActivity extends Activity {
 
             int start = groupsList.getFirstVisiblePosition();
 
-            //View groupView = (View) groupsList.getChildAt(position - start);
-            //View groupContainer = groupView.findViewById(R.id.group_container);
-            //groupContainer.setBackgroundColor(!isSelected ? Color.argb(65, 60, 138, 36) : getResources().getColor(R.color.grey_background));
-
             ((GroupListAdapter) groupsAdapter).notifyDataSetChanged();
-            //Log.d("CLICK", groups.get(position).getName());
-
 
             }
         });
@@ -102,8 +96,6 @@ public class SelectGroupsActivity extends Activity {
 
             currentUser.setSelectedGroups(selectedGroups);
             userActions.setCurrentUser(currentUser);
-            Intent listNeedsActivity = new Intent(SelectGroupsActivity.this, ListNeedsActivity.class);
-            startActivity(listNeedsActivity);
             }
 
         });
@@ -169,6 +161,9 @@ public class SelectGroupsActivity extends Activity {
             public void onResponse(JSONObject response) {
                 // TODO Auto-generated method stub
                 Log.d("createUser", response.toString());
+
+                Intent listNeedsActivity = new Intent(SelectGroupsActivity.this, ListNeedsActivity.class);
+                startActivity(listNeedsActivity);
             }
         }, new com.android.volley.Response.ErrorListener() {
 
@@ -176,6 +171,7 @@ public class SelectGroupsActivity extends Activity {
             public void onErrorResponse(VolleyError error) {
                 // TODO Auto-generated method stub
                 Log.d("createUser", error.toString());
+                Toast.makeText(SelectGroupsActivity.this, "Une erreur s'est produite.", Toast.LENGTH_LONG).show();
             }
         });
 

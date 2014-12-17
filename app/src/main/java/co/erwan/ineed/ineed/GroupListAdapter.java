@@ -52,7 +52,7 @@ public class GroupListAdapter extends BaseAdapter {
         countMembers.setText(countMembersValue.toString() + " " + context.getResources().getString(stringId));
 
         View groupContainer = rowView.findViewById(R.id.group_container);
-        groupContainer.setBackgroundColor(getItem(position).getSelected() ? Color.argb(65, 60, 138, 36) : context.getResources().getColor(R.color.grey_background));
+        groupContainer.setBackgroundColor(getItem(position).getSelected() ? context.getResources().getColor(R.color.green_selection) : context.getResources().getColor(R.color.grey_item));
 
         return rowView;
     }

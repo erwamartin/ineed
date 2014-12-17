@@ -7,12 +7,12 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/profil_infos_container"
+        android:id="@+id/group_container"
         android:layout_alignParentTop="true"
-        android:paddingLeft="30dp"
-        android:paddingTop="15dp"
+        android:paddingLeft="40dp"
+        android:paddingTop="20dp"
         android:paddingRight="30dp"
-        android:paddingBottom="15dp"
+        android:paddingBottom="20dp"
         android:background="@color/grey_background">
 
         <TextView
@@ -23,7 +23,8 @@
             android:maxLines = "1"
             android:textSize="25dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            android:textColor="#ffffffff" />
 
         <TextView
             android:id="@+id/count_needs"
@@ -38,7 +39,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_alignParentRight="true"
-            android:textSize="15dp"/>
+            android:textSize="15dp"
+            android:textColor="#ffffffff" />
 
     </RelativeLayout>
 

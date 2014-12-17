@@ -15,6 +15,8 @@ public class User {
 
     private ArrayList<Group> selectedGroups;
 
+    public User() {}
+
     public User(Long id, String name){
         this.id = id;
         this.name = name;
