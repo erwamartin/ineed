@@ -8,10 +8,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -29,10 +39,15 @@ public class AddNeedActivity extends Activity {
     private GroupListAdapter groupsAdapter;
     private ListView groupsList;
 
+    private RequestQueue mVolleyRequestQueue;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         userActions = new UserActions(this);
+
+        mVolleyRequestQueue = Volley.newRequestQueue(this);
+        mVolleyRequestQueue.start();
 
         setContentView(R.layout.activity_add_need);
         groupsList = (ListView) findViewById(R.id.groups_list);
@@ -83,10 +98,56 @@ public class AddNeedActivity extends Activity {
             @Override
             public void onClick(View v) {
 
+                EditText needContent = (EditText)findViewById(R.id.need_content);
+                String needContentValue = needContent.getText().toString();
+
+                JSONObject jsonParams = new JSONObject();
+
+                try {
+
+                    jsonParams.put("user",currentUser.getId().toString());
+                    jsonParams.put("message",needContentValue);
+
+                    JSONArray jsonGroups = new JSONArray();
+
+                    for (Group g : selectedGroups) {
+                        jsonGroups.put(g.getId().toString());
+                    }
+
+                    jsonParams.put("group", jsonGroups);
+
+                    addNeedAPI(jsonParams);
+                    Log.d("jsonParams", jsonParams.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 Intent listNeedsActivity = new Intent(AddNeedActivity.this, ListNeedsActivity.class);
                 startActivity(listNeedsActivity);
             }
 
         });
+    }
+
+    private void addNeedAPI (JSONObject params) {
+        String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.add_need);
+
+        JsonObjectRequest createUserRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, url, params, new com.android.volley.Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                // TODO Auto-generated method stub
+                Log.d("addNeedAPI", response.toString());
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO Auto-generated method stub
+                Log.d("addNeedAPI", error.toString());
+            }
+        });
+
+        mVolleyRequestQueue.add(createUserRequest);
     }
 }

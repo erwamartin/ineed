@@ -45,7 +45,7 @@ public class ListNeedsActivity extends Activity {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
-    private List<Group> groups;
+    private ArrayList<Group> groups;
     private HashMap<Group, List<Need>> needs;
     private GroupNeedListAdapter groupsAdapter;
     private ExpandableListView groupsList;
@@ -117,6 +117,7 @@ public class ListNeedsActivity extends Activity {
                     needs = new HashMap<Group, List<Need>>();
 
                     for (int i = 0, leni = response.length(); i < leni; i++) {
+                        Log.d("eni", leni + "");
                         try {
                             JSONObject jsonGroup = (JSONObject)response.get(i);
                             Group newGroup = new Group(jsonGroup.getString("fbGroupId"), jsonGroup.getString("name"));
@@ -126,9 +127,9 @@ public class ListNeedsActivity extends Activity {
 
                             List<Need> needList = new ArrayList<Need>();
 
-                            for (int j = 0, lenj = jsonNeeds.length(); i < lenj; i++) {
+                            for (int j = 0, lenj = jsonNeeds.length(); j < lenj; j++) {
                                 JSONObject jsonNeed = (JSONObject)jsonNeeds.get(j);
-                                Need newNeed = new Need(jsonNeed.getString("content"), currentUser);
+                                Need newNeed = new Need(jsonNeed.getString("message"), currentUser);
                                 needList.add(newNeed);
                             }
 
@@ -140,13 +141,17 @@ public class ListNeedsActivity extends Activity {
                     }
 
                     if (groupsAdapter == null) {
+                       Log.d("ROUPADAPTER", "groupsAdapter == null");
                         groupsAdapter = new GroupNeedListAdapter(ListNeedsActivity.this, groups, needs);
                         groupsList.setAdapter(groupsAdapter);
                     } else {
-
+                        Log.d("ROUPADAPTER", "groupsAdapter != null");
                         ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
 
                     }
+
+                    currentUser.setSelectedGroups(groups);
+                    userActions.setCurrentUser(currentUser);
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
@@ -160,17 +165,6 @@ public class ListNeedsActivity extends Activity {
 
         mVolleyRequestQueue.add(createUserRequest);
 
-    }
-
-    private void getNeeds() {
-        needs = new HashMap<Group, List<Need>>();
-
-        for (Group g : groups) {
-            List<Need> needList = new ArrayList<Need>();
-            Need newNeed = new Need("J'ai besoin de sucre", currentUser);
-            needList.add(newNeed);
-            needs.put(g, needList);
-        }
     }
 
     public void removeNeed (Group group, Need need) {
