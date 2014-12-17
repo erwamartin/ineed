@@ -17,6 +17,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -48,11 +52,16 @@ public class SelectGroupsActivity extends Activity {
     private User currentUser;
     private ArrayList<Group> selectedGroups;
 
+    private RequestQueue mVolleyRequestQueue;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         groups = new ArrayList<Group>();
         selectedGroups = new ArrayList<Group>();
+
+        mVolleyRequestQueue = Volley.newRequestQueue(this);
+        mVolleyRequestQueue.start();
 
         setContentView(R.layout.activity_select_groups);
 
@@ -89,6 +98,8 @@ public class SelectGroupsActivity extends Activity {
             @Override
             public void onClick(View v) {
 
+            createUser();
+
             currentUser.setSelectedGroups(selectedGroups);
             userActions.setCurrentUser(currentUser);
             Intent listNeedsActivity = new Intent(SelectGroupsActivity.this, ListNeedsActivity.class);
@@ -97,68 +108,78 @@ public class SelectGroupsActivity extends Activity {
 
         });
 
-        this.getUserData();
+        //this.getUserData();
+        refreshUserData();
 
         this.getUserGroups();
     }
 
     public void refreshUserData(){
-        User current_user = userActions.getCurrentUser();
+        currentUser = userActions.getCurrentUser();
 
-        Log.d("current_user", current_user.toString());
+        Log.d("current_user", currentUser.toString());
 
         TextView user_firstname = (TextView) findViewById(R.id.user_firstname);
-        user_firstname.setText(current_user.getFirstname());
+        user_firstname.setText(currentUser.getFirstname());
 
         new DownloadImageTask((ImageView) findViewById(R.id.user_picture))
-                .execute(current_user.getPicture());
+                .execute(currentUser.getPicture());
     }
 
-    protected void getUserData() {
-        Session session = Session.getActiveSession();
+    private void createUser() {
+        JSONObject jsonParams = new JSONObject();
 
-        Bundle params = new Bundle();
-        params.putString("fields", "id,first_name,last_name,name,picture");
+        try {
+            JSONArray jsonUsers = new JSONArray();
+            JSONObject jsonUser = new JSONObject();
 
-        final SelectGroupsActivity _this = this;
+            jsonUser.put("id",currentUser.getId().toString());
+            jsonUser.put("firstname",currentUser.getFirstname());
+            jsonUser.put("picture",currentUser.getPicture());
 
-        new Request(
-                session,
-                "/me",
-                params,
-                HttpMethod.GET,
-                new Request.Callback() {
-                    public JSONObject onCompleted(Response response) {
-                        GraphObject graphObject = response.getGraphObject();
+            jsonUsers.put(jsonUser);
+            jsonParams.put("user", jsonUsers);
 
-                        Log.d("graphObjectUSER", graphObject.getProperty("id").toString());
+            JSONArray jsonGroups = new JSONArray();
 
-                        FacebookRequestError error = response.getError();
+            for (Group g : selectedGroups) {
+                JSONObject jsonGroup = new JSONObject();
 
-                        if (error == null) {
+                jsonGroup.put("id",g.getId());
+                jsonGroup.put("name",g.getName());
 
-                            User newUser = new User(Long.parseLong(graphObject.getProperty("id").toString()), graphObject.getProperty("name").toString());
-                            newUser.setFirstname(graphObject.getProperty("first_name").toString());
+                jsonGroups.put(jsonGroup);
+            }
 
-                            JSONObject json_picture = (JSONObject) graphObject.getProperty("picture");
-                            try {
-                                JSONObject picture_data = json_picture.getJSONObject("data");
-                                newUser.setPicture(picture_data.getString("url"));
+            jsonParams.put("group", jsonGroups);
 
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            } finally {
-                                currentUser = newUser;
-                                userActions.setCurrentUser(newUser);
-                                _this.refreshUserData();
-                            }
+            createUserAPI(jsonParams);
+            Log.d("jsonParams", jsonParams.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
-                        }
+    private void createUserAPI(JSONObject params) {
+        String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.create_user);
+        
+        JsonObjectRequest createUserRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, url, params, new com.android.volley.Response.Listener<JSONObject>() {
 
-                        return null;
-                    }
-                }
-        ).executeAsync();
+            @Override
+            public void onResponse(JSONObject response) {
+                // TODO Auto-generated method stub
+                Log.d("createUser", response.toString());
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO Auto-generated method stub
+                Log.d("createUser", error.toString());
+            }
+        });
+
+        mVolleyRequestQueue.add(createUserRequest);
     }
 
     protected void addItemListGroups(Group group) {

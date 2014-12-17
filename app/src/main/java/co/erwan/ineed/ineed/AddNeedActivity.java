@@ -1,11 +1,13 @@
 package co.erwan.ineed.ineed;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -73,6 +75,18 @@ public class AddNeedActivity extends Activity {
                 ((GroupListAdapter) groupsAdapter).notifyDataSetChanged();
 
             }
+        });
+
+        Button nextStepButton = (Button)findViewById(R.id.add_need_button);
+        nextStepButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                Intent listNeedsActivity = new Intent(AddNeedActivity.this, ListNeedsActivity.class);
+                startActivity(listNeedsActivity);
+            }
+
         });
     }
 }

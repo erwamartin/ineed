@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="server_path">http://i-need-api.herokuapp.com/</string>
+    <string name="create_user">group/</string>
+    <string name="get_user">user/</string>
+</resources>

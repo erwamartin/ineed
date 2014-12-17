@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/facebook/facebook.iml" filepath="$PROJECT_DIR$/facebook/facebook.iml" />
       <module fileurl="file://$PROJECT_DIR$/ineed.iml" filepath="$PROJECT_DIR$/ineed.iml" />
       <module fileurl="file://$PROJECT_DIR$/ineed_android.iml" filepath="$PROJECT_DIR$/ineed_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/volley/volley.iml" filepath="$PROJECT_DIR$/volley/volley.iml" />
     </modules>
   </component>
 </project>
