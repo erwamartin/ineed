@@ -19,6 +19,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.FacebookRequestError;
 import com.facebook.HttpMethod;
@@ -117,7 +118,6 @@ public class ListNeedsActivity extends Activity {
                     needs = new HashMap<Group, List<Need>>();
 
                     for (int i = 0, leni = response.length(); i < leni; i++) {
-                        Log.d("eni", leni + "");
                         try {
                             JSONObject jsonGroup = (JSONObject)response.get(i);
                             Group newGroup = new Group(jsonGroup.getString("fbGroupId"), jsonGroup.getString("name"));
@@ -129,7 +129,7 @@ public class ListNeedsActivity extends Activity {
 
                             for (int j = 0, lenj = jsonNeeds.length(); j < lenj; j++) {
                                 JSONObject jsonNeed = (JSONObject)jsonNeeds.get(j);
-                                Need newNeed = new Need(jsonNeed.getString("message"), currentUser);
+                                Need newNeed = new Need(jsonNeed.getString("idItem"), jsonNeed.getString("message"), currentUser);
                                 needList.add(newNeed);
                             }
 
@@ -167,10 +167,31 @@ public class ListNeedsActivity extends Activity {
 
     }
 
-    public void removeNeed (Group group, Need need) {
-        needs.get(group).remove(need);
+    public void removeNeed (final Group group, final Need need) {
 
-        ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
+        String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.remove_need);
+        url = url.replace("{need_id}", need.getId());
+
+        StringRequest removeNeedRequest = new StringRequest(com.android.volley.Request.Method.DELETE, url, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                // response
+                Toast.makeText(ListNeedsActivity.this, "Supprimé", Toast.LENGTH_LONG).show();
+
+                needs.get(group).remove(need);
+
+                ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // TODO Auto-generated method stub
+                Log.d("removeNeedRequest", error.toString());
+            }
+        });
+
+        mVolleyRequestQueue.add(removeNeedRequest);
     }
 }
 

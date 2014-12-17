@@ -23,7 +23,8 @@ public class Need implements Serializable {
 
     public void setUser(User user) { this.user = user; }
 
-    public Need(String content, User user) {
+    public Need(String id, String content, User user) {
+        this.id = id;
         this.content = content;
         this.user = user;
     }

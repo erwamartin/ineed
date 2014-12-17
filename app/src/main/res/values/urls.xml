@@ -5,4 +5,5 @@
     <string name="get_user">user/{user_id}/</string>
     <string name="get_user_needs">user/{user_id}/group/</string>
     <string name="add_need">item/</string>
+    <string name="remove_need">item/{need_id}/</string>
 </resources>
