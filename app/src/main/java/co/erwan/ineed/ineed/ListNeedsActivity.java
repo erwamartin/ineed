@@ -81,5 +81,11 @@ public class ListNeedsActivity extends Activity {
             needs.put(g, needList);
         }
     }
+
+    public void removeNeed (Group group, Need need) {
+        needs.get(group).remove(need);
+
+        ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
+    }
 }
 

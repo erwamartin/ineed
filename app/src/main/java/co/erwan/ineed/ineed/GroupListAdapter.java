@@ -6,42 +6,67 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Created by erwanmartin on 15/12/2014.
  */
 
-public class GroupListAdapter extends ArrayAdapter<Group> {
+public class GroupListAdapter extends BaseAdapter {
 
-    private Group[] groups;
+    private Context context;
+    private ArrayList<Group> groups;
+
+    @Override
+    public int getCount() {
+        return groups.size();
+    }
+
+    @Override
+    public Group getItem(int position) {
+        return groups.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater)
-                getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         int viewLayout = R.layout.view_group_select_groups;
 
         View rowView = inflater.inflate(viewLayout, parent, false);
 
         TextView groupName = (TextView) rowView.findViewById(R.id.group_name);
-        groupName.setText(groups[position].getName());
+        groupName.setText(getItem(position).getName());
 
         TextView countMembers = (TextView) rowView.findViewById(R.id.count_members);
-        Integer countMembersValue = groups[position].getCountMembers();
+        Integer countMembersValue = getItem(position).getCountMembers();
 
         Integer stringId = countMembersValue > 1 ? R.string.count_members_string_plurar : R.string.count_members_string_singular;
-        countMembers.setText(countMembersValue.toString() + " " + getContext().getResources().getString(stringId));
+        countMembers.setText(countMembersValue.toString() + " " + context.getResources().getString(stringId));
 
         View groupContainer = rowView.findViewById(R.id.group_container);
-        groupContainer.setBackgroundColor(groups[position].getSelected() ? Color.argb(65, 60, 138, 36) : getContext().getResources().getColor(R.color.grey_background));
+        groupContainer.setBackgroundColor(getItem(position).getSelected() ? Color.argb(65, 60, 138, 36) : context.getResources().getColor(R.color.grey_background));
 
         return rowView;
     }
 
-    public GroupListAdapter(Context context, Group[] groups) {
-        super(context, R.layout.activity_select_groups, groups);
+    public GroupListAdapter(Context context, ArrayList<Group> groups) {
+        this.context = context;
         this.groups = groups;
+    }
+
+    public void updateReceiptsList(ArrayList<Group> newGroups) {
+        groups.clear();
+        groups.addAll(newGroups);
+        this.notifyDataSetChanged();
     }
 }

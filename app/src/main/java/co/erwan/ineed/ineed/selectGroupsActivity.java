@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -40,7 +41,7 @@ public class SelectGroupsActivity extends Activity {
 
     private static final String TAG = MainFragment.class.getSimpleName();
 
-    private List<Group> groups;
+    private ArrayList<Group> groups;
     private GroupListAdapter groupsAdapter;
     private ListView groupsList;
     private UserActions userActions;
@@ -164,13 +165,15 @@ public class SelectGroupsActivity extends Activity {
         groups.add(group);
 
         if (groups.size() == 1) {
-            groupsAdapter = new GroupListAdapter(SelectGroupsActivity.this, groups.toArray(new Group[groups.size()]));
+            groupsAdapter = new GroupListAdapter(SelectGroupsActivity.this, groups);
             groupsList.setAdapter(groupsAdapter);
         } else {
             //groupsAdapter.add(group);
-            groupsAdapter = new GroupListAdapter(SelectGroupsActivity.this, groups.toArray(new Group[groups.size()]));
-            groupsList.setAdapter(groupsAdapter);
+            //groupsAdapter = new GroupListAdapter(SelectGroupsActivity.this, groups.toArray(new Group[groups.size()]));
+            //groupsList.setAdapter(groupsAdapter);
             //groupsAdapter.notifyDataSetChanged();
+
+            ((GroupListAdapter) groupsAdapter).notifyDataSetChanged();
         }
     }
 

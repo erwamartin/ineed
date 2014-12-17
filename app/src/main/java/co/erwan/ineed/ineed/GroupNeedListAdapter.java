@@ -1,13 +1,16 @@
 package co.erwan.ineed.ineed;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -91,7 +94,7 @@ public class GroupNeedListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String needContentValue = (String) getChild(groupPosition, childPosition).getContent();
         final User user = (User) getChild(groupPosition, childPosition).getUser();
@@ -107,6 +110,20 @@ public class GroupNeedListAdapter extends BaseExpandableListAdapter {
 
         TextView user_firstname = (TextView) convertView.findViewById(R.id.user_firstname);
         user_firstname.setText(user.getFirstname());
+
+        Button removeButton = (Button) convertView.findViewById(R.id.remove_button);
+        removeButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+
+                if(context instanceof ListNeedsActivity){
+                    ((ListNeedsActivity)context).removeNeed(getGroup(groupPosition), getChild(groupPosition, childPosition));
+                }
+            }
+
+        });
 
         new DownloadImageTask((ImageView) convertView.findViewById(R.id.user_picture))
                 .execute(user.getPicture());
