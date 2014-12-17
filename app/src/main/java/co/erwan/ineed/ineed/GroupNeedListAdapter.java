@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -114,7 +115,7 @@ public class GroupNeedListAdapter extends BaseExpandableListAdapter {
         TextView user_firstname = (TextView) convertView.findViewById(R.id.user_firstname);
         user_firstname.setText(user.getFirstname());
 
-        Button removeButton = (Button) convertView.findViewById(R.id.remove_button);
+        ImageButton removeButton = (ImageButton) convertView.findViewById(R.id.remove_button);
         removeButton.setOnClickListener(new View.OnClickListener(){
 
             @Override

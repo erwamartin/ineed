@@ -15,5 +15,7 @@
     <string name="add_groups_instruction">Choisissez les groupes dont vous souhaitez suivre les annonces</string>
     <string name="add_need_instruction">Votre annonce en moins de 150 caractères</string>
     <string name="add_need_groups_instruction">Sélectionnez les groupes concernés</string>
+    <string name="edit_needs">Modifier mes annonces</string>
+    <string name="application_name">iNeed</string>
 
 </resources>

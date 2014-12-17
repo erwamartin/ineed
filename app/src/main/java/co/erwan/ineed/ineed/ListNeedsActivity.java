@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -81,7 +82,7 @@ public class ListNeedsActivity extends Activity {
         new DownloadImageTask((ImageView) findViewById(R.id.user_picture))
                 .execute(currentUser.getPicture());
 
-        Button addNeedButton = (Button)findViewById(R.id.add_need_button);
+        ImageButton addNeedButton = (ImageButton)findViewById(R.id.add_need_button);
         addNeedButton.setOnClickListener(new View.OnClickListener(){
 
             @Override

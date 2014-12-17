@@ -20,11 +20,14 @@
             android:layout_height="wrap_content"
             android:text="Group name"
             android:id="@+id/group_name"
-            android:maxLines = "1"
             android:textSize="25dp"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:textColor="#ffffffff" />
+            android:textColor="#ffffffff"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_toStartOf="@+id/count_needs" />
 
         <TextView
             android:id="@+id/count_needs"
