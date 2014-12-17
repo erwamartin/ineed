@@ -162,7 +162,7 @@ public class SelectGroupsActivity extends Activity {
 
     private void createUserAPI(JSONObject params) {
         String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.create_user);
-        
+
         JsonObjectRequest createUserRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, url, params, new com.android.volley.Response.Listener<JSONObject>() {
 
             @Override

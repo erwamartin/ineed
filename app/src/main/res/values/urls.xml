@@ -2,5 +2,6 @@
 <resources>
     <string name="server_path">http://i-need-api.herokuapp.com/</string>
     <string name="create_user">group/</string>
-    <string name="get_user">user/</string>
+    <string name="get_user">user/{user_id}/</string>
+    <string name="get_user_needs">user/{user_id}/group/</string>
 </resources>

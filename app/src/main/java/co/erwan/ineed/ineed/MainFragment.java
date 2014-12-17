@@ -86,31 +86,11 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    private void createUser (JSONObject params) {
-        String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.create_user);
-
-        JsonObjectRequest createUserRequest = new JsonObjectRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>() {
-
-            @Override
-           public void onResponse(JSONObject response) {
-                // TODO Auto-generated method stub
-                Log.d("createUser", response.toString());
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // TODO Auto-generated method stub
-                Log.d("createUser", error.toString());
-            }
-        });
-
-        mVolleyRequestQueue.add(createUserRequest);
-
-    }
-
     private void getUser (String userId) {
-        String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.get_user) + userId;
+        String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.get_user);
+        url = url.replace("{user_id}", userId);
+
+        Log.d("getUser", url);
 
         JsonObjectRequest createUserRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -121,32 +101,14 @@ public class MainFragment extends Fragment {
                 if (response.length() == 0) {
                     Log.d("createUser", "EXISTE PAS");
 
-                    /*JSONObject jsonParams = new JSONObject();
-
-                    try {
-                        JSONArray jsonUsers = new JSONArray();
-                        JSONObject jsonUser = new JSONObject();
-
-                        jsonUser.put("id",currentUser.getId());
-                        jsonUser.put("firstname",currentUser.getFirstname());
-                        jsonUser.put("picture",currentUser.getPicture());
-
-                        jsonParams.put("user", "Doe");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    createUser(jsonParams);
-
-                    createUser();*/
-
                     Intent selectGroupsActivity = new Intent(getActivity(), SelectGroupsActivity.class);
                     startActivity(selectGroupsActivity);
 
                 } else {
                     Log.d("createUser", "EXISTE");
 
-
+                    Intent listNeedsActivity = new Intent(getActivity(), ListNeedsActivity.class);
+                    startActivity(listNeedsActivity);
                }
             }
         }, new Response.ErrorListener() {
