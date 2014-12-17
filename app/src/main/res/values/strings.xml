@@ -7,10 +7,13 @@
     <string name="facebook_app_id">850534168346687</string>
     <string name="title_facebook_login">Facebook Connect</string>
     <string name="next_step">PASSER À L\'ÉTAPE SUIVANTE</string>
+    <string name="validate_need">VALIDER MON ANNONCE</string>
     <string name="count_members_string_singular">membre</string>
     <string name="count_members_string_plurar">membres</string>
     <string name="count_needs_string_singular">annonce</string>
     <string name="count_needs_string_plurar">annonces</string>
     <string name="add_groups_instruction">Choisissez les groupes dont vous souhaitez suivre les annonces</string>
+    <string name="add_need_instruction">Votre annonce en moins de 150 caractères</string>
+    <string name="add_need_groups_instruction">Sélectionnez les groupes concernés</string>
 
 </resources>

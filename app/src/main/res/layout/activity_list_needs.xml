@@ -39,6 +39,15 @@
             android:layout_toRightOf="@+id/user_picture"
             android:layout_marginLeft="20dp" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:id="@+id/add_need_button"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/user_firstname"
+            android:layout_marginStart="128dp" />
+
     </RelativeLayout>
 
     <ExpandableListView

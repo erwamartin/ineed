@@ -1,6 +1,7 @@
 package co.erwan.ineed.ineed;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -68,6 +69,18 @@ public class ListNeedsActivity extends Activity {
 
         new DownloadImageTask((ImageView) findViewById(R.id.user_picture))
                 .execute(currentUser.getPicture());
+
+        Button addNeedButton = (Button)findViewById(R.id.add_need_button);
+        addNeedButton.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                Intent addNeedActivity = new Intent(ListNeedsActivity.this, AddNeedActivity.class);
+                startActivity(addNeedActivity);
+            }
+
+        });
 
     }
 

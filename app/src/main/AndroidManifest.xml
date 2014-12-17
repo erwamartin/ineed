@@ -28,6 +28,9 @@
         <activity
             android:name=".ListNeedsActivity">
         </activity>
+        <activity
+            android:name=".AddNeedActivity">
+        </activity>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
     </application>
 

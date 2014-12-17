@@ -21,9 +21,7 @@ public class GroupListAdapter extends BaseAdapter {
     private ArrayList<Group> groups;
 
     @Override
-    public int getCount() {
-        return groups.size();
-    }
+    public int getCount() { return groups.size(); }
 
     @Override
     public Group getItem(int position) {

@@ -57,7 +57,7 @@ public class SelectGroupsActivity extends Activity {
         setContentView(R.layout.activity_select_groups);
 
         userActions = new UserActions(this);
-        groupsList = (ListView) findViewById(R.id.groupsList);
+        groupsList = (ListView) findViewById(R.id.groups_list);
 
         groupsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -72,11 +72,12 @@ public class SelectGroupsActivity extends Activity {
 
             int start = groupsList.getFirstVisiblePosition();
 
-            View groupView = (View) groupsList.getChildAt(position - start);
-            View groupContainer = groupView.findViewById(R.id.group_container);
-            groupContainer.setBackgroundColor(!isSelected ? Color.argb(65, 60, 138, 36) : getResources().getColor(R.color.grey_background));
+            //View groupView = (View) groupsList.getChildAt(position - start);
+            //View groupContainer = groupView.findViewById(R.id.group_container);
+            //groupContainer.setBackgroundColor(!isSelected ? Color.argb(65, 60, 138, 36) : getResources().getColor(R.color.grey_background));
 
-            Log.d("CLICK", groups.get(position).getName());
+            ((GroupListAdapter) groupsAdapter).notifyDataSetChanged();
+            //Log.d("CLICK", groups.get(position).getName());
 
 
             }
