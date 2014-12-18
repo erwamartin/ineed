@@ -52,14 +52,31 @@
         android:paddingLeft="30dp"
         android:paddingRight="30dp"
         android:paddingTop="15dp"
-        android:paddingBottom="15sp"
         android:background="@drawable/grey_border_top">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/add_need_instruction" />
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/need_icon"
+                android:src="@drawable/annonce"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/add_need_instruction"
+                android:layout_alignParentLeft="false"
+                android:layout_toRightOf="@+id/need_icon"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
 
         <EditText
             android:layout_width="match_parent"
@@ -67,7 +84,9 @@
             android:id="@+id/need_content"
             android:lines="3"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp" />
+            android:gravity="top"
+            android:layout_marginTop="10dp"
+            android:background="#ffffffff" />
     </LinearLayout>
 
     <LinearLayout
@@ -78,24 +97,39 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/select_groups_container"
         android:layout_below="@+id/add_need_container"
-        android:background="@drawable/grey_border_top"
         android:layout_above="@+id/add_need_button">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="@string/add_need_groups_instruction"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="15dp" />
+            android:layout_alignParentTop="true"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/group_icon"
+                android:src="@drawable/groupe"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="@string/add_need_groups_instruction"
+                android:layout_toRightOf="@+id/group_icon"/>
+
+        </RelativeLayout>
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:id="@+id/groups_list"
             android:scrollingCache="false"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="15dp" />
 
     </LinearLayout>
 

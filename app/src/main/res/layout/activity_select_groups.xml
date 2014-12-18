@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:id="@+id/groups_list"
-        android:scrollingCache="false"
+        android:scrollingCache="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/linearLayout"
         android:layout_above="@+id/next_step_button" />

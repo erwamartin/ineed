@@ -3,6 +3,8 @@ package co.erwan.ineed.ineed;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -35,7 +37,7 @@ import co.erwan.ineed.ineed.Models.User;
 /**
  * Created by erwanmartin on 16/12/2014.
  */
-public class ListNeedsActivity extends Application {
+public class ListNeedsActivity extends Application implements SwipeRefreshLayout.OnRefreshListener {
 
     protected Integer layout = R.layout.activity_list_needs;
 
@@ -43,6 +45,7 @@ public class ListNeedsActivity extends Application {
     protected HashMap<Group, List<Need>> needs;
     protected GroupNeedListAdapter groupsAdapter;
     protected ExpandableListView groupsList;
+    private SwipeRefreshLayout swipeLayout;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +103,21 @@ public class ListNeedsActivity extends Application {
             });
         }
 
+        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+
     }
+
+    @Override
+    public void onRefresh() {
+        /*new Handler().postDelayed(new Runnable() {
+            @Override public void run() {
+                swipeLayout.setRefreshing(false);
+            }
+        }, 5000);*/
+        getNeedsAPI();
+    }
+
 
     protected void goToProfile() {
         Intent profileActivity = new Intent(ListNeedsActivity.this, ProfileActivity.class);
@@ -174,12 +191,16 @@ public class ListNeedsActivity extends Application {
                         groupsList.setAdapter(groupsAdapter);
                     } else {
                         Log.d("ROUPADAPTER", "groupsAdapter != null");
+                        groupsAdapter = new GroupNeedListAdapter(ListNeedsActivity.this, groups, needs);
+                        groupsList.setAdapter(groupsAdapter);
                         ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
 
                     }
 
                     currentUser.setSelectedGroups(groups);
                     userActions.setCurrentUser(currentUser);
+
+                    swipeLayout.setRefreshing(false);
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {
