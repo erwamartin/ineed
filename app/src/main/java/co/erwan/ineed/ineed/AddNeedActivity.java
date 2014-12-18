@@ -73,10 +73,6 @@ public class AddNeedActivity extends Activity {
 
                 int start = groupsList.getFirstVisiblePosition();
 
-                //View groupView = (View) groupsList.getChildAt(position - start);
-                //View groupContainer = groupView.findViewById(R.id.group_container);
-                //groupContainer.setBackgroundColor(!isSelected ? Color.argb(65, 60, 138, 36) : getResources().getColor(R.color.grey_background));
-
                 ((GroupListAdapter) groupsAdapter).notifyDataSetChanged();
 
             }
@@ -139,12 +135,15 @@ public class AddNeedActivity extends Activity {
                 Log.d("addNeedAPI", response.toString());
 
                 for (Group g : selectedGroups) {
+
+                    String message= currentUser.getFirstname() + " vient de poster une annonce dans " + g.getName();
+
                     ParsePush push = new ParsePush();
                     ParseQuery pushQuery = ParseInstallation.getQuery();
                     pushQuery.whereEqualTo("channels", "group_" + g.getId());
                     pushQuery.whereNotEqualTo("channels", "user_" + currentUser.getId().toString());
+                    push.setMessage(message);
                     push.setQuery(pushQuery);
-                    push.setMessage(currentUser.getFirstname() + " vient de poster une annonce dans " + g.getName());
                     push.sendInBackground();
                 }
 

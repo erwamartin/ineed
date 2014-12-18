@@ -234,10 +234,20 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
                     Toast.makeText(ListNeedsActivity.this, "Annonce supprimée", Toast.LENGTH_LONG).show();
                 } else {
 
+                    JSONObject jsonData = new JSONObject();
+                    String message= currentUser.getFirstname() + " vient de répondre à votre annonce dans " + group.getName();
+                    try {
+                        jsonData.put("alert", message);
+                        jsonData.put("user_id", currentUser.getId());
+                        jsonData.put("type", "acceptation");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     ParsePush push = new ParsePush();
                     Log.d("\"user_\" + need.getUser().getId().toString()", "user_" + need.getUser().getId().toString());
                     push.setChannel("user_" + need.getUser().getId().toString());
-                    push.setMessage(currentUser.getFirstname() + " vient de répondre à votre annonce dans " + group.getName());
+                    push.setData(jsonData);
                     push.sendInBackground();
 
                     String annonce = need.getUser().getFirstname() + " a été prévenu.";
