@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Group implements Serializable {
     private String id;
     private String name;
-    private ArrayList<User> members;
+    private Integer countMembers;
     private Boolean selected;
 
 
@@ -33,10 +33,8 @@ public class Group implements Serializable {
 
     public void setSelected(Boolean selected) { this.selected = selected; }
 
-    public Integer getCountMembers() { return members == null ? 0 : members.size(); }
+    public Integer getCountMembers() { return countMembers; }
 
-    public ArrayList<User> getMembers() { return members; }
-
-    public void setMembers(ArrayList<User> members) { this.members = members; }
+    public void setCountMembers(Integer countMembers) { this.countMembers = countMembers; }
 }
 

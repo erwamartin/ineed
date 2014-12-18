@@ -253,21 +253,9 @@ public class SelectGroupsActivity extends Application {
 
                         if (error == null) {
 
-                            JSONArray jArray = (JSONArray)graphObject.getProperty("data");
+                            JSONArray groupUsers = (JSONArray)graphObject.getProperty("data");
 
-                            ArrayList<User> usersOfGroup = new ArrayList<User>();
-
-                            for(int i=0;i<jArray.length();i++) {
-                                try {
-                                    JSONObject graphMember = jArray.getJSONObject(i);
-
-                                    usersOfGroup.add(new User(graphMember.getString("id"), graphMember.getString("name")));
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            group.setMembers(usersOfGroup);
+                            group.setCountMembers(groupUsers.length());
 
                             addItemListGroups(group);
 

@@ -159,6 +159,7 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
                         try {
                             JSONObject jsonGroup = (JSONObject)response.get(i);
                             Group newGroup = new Group(jsonGroup.getString("fbGroupId"), jsonGroup.getString("name"));
+                            newGroup.setCountMembers(jsonGroup.getInt("nbUser"));
                             groups.add(newGroup);
 
                             JSONArray jsonNeeds = (JSONArray)jsonGroup.getJSONArray("items");
@@ -197,6 +198,9 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
                         ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
 
                     }
+
+                    for(int i=0, len = groupsAdapter.getGroupCount(); i < len ; i++)
+                        groupsList.expandGroup(i);
 
                     currentUser.setSelectedGroups(groups);
                     userActions.setCurrentUser(currentUser);
