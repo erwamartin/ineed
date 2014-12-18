@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -68,10 +69,10 @@ public class FacebookConnectFragment extends Fragment {
             public void onUserInfoFetched(GraphUser user) {
             if (user != null) {
                 Log.d("LOGIN", "You are currently logged in as " + user.getName());
-                //_this.routeActivity();
                 _this.getFbUserData();
             } else {
                 Log.d("LOGIN", "You are not logged in.");
+                Toast.makeText(_this.getActivity(), "Une erreur s'est produite.", Toast.LENGTH_LONG).show();
             }
             }
         });

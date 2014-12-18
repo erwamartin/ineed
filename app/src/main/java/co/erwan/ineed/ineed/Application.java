@@ -1,12 +1,14 @@
 package co.erwan.ineed.ineed;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
+import com.parse.PushService;
 
 import co.erwan.ineed.ineed.Models.User;
 
@@ -16,11 +18,20 @@ import co.erwan.ineed.ineed.Models.User;
 public class Application extends Activity {
 
     protected static final String TAG = FacebookConnectFragment.class.getSimpleName();
+    private static Application instance = new Application();
 
     protected UserActions userActions;
     protected User currentUser;
 
     protected RequestQueue mVolleyRequestQueue;
+
+    public Application() {
+        instance = this;
+    }
+
+    public static Context getContext() {
+        return instance;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

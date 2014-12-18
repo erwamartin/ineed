@@ -46,9 +46,9 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
     protected HashMap<Group, List<Need>> needs;
     protected GroupNeedListAdapter groupsAdapter;
     protected ExpandableListView groupsList;
-    private SwipeRefreshLayout swipeLayout;
+    protected SwipeRefreshLayout swipeLayout;
 
-    private ImageButton addNeedButton;
+    protected ImageButton addNeedButton;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,10 +104,10 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
                     goToProfile();
                 }
             });
-        }
 
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
-        swipeLayout.setOnRefreshListener(this);
+            swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+            swipeLayout.setOnRefreshListener(this);
+        }
 
     }
 
@@ -125,8 +125,6 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
     protected void goToProfile() {
         Intent profileActivity = new Intent(ListNeedsActivity.this, ProfileActivity.class);
         startActivity(profileActivity);
-
-        Toast.makeText(ListNeedsActivity.this, "Change", Toast.LENGTH_LONG).show();
     }
 
     protected void getNeedsAPI () {
@@ -205,7 +203,9 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
                     currentUser.setSelectedGroups(groups);
                     userActions.setCurrentUser(currentUser);
 
-                    swipeLayout.setRefreshing(false);
+                    if(_this.getLocalClassName().equals("ListNeedsActivity")) {
+                        swipeLayout.setRefreshing(false);
+                    }
                 }
             }
         }, new com.android.volley.Response.ErrorListener() {

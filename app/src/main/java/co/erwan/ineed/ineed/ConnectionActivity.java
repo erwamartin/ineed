@@ -11,7 +11,6 @@ import com.facebook.AppEventsLogger;
 public class ConnectionActivity extends FragmentActivity {
 
     private FacebookConnectFragment facebookConnectFragment;
-    private static final String TAG = FacebookConnectFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
