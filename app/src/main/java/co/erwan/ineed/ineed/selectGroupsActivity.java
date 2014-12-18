@@ -1,14 +1,9 @@
 package co.erwan.ineed.ineed;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -27,32 +22,28 @@ import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphObject;
-import com.google.gson.Gson;
+import com.parse.ParsePush;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import co.erwan.ineed.ineed.Adapters.GroupListAdapter;
 import co.erwan.ineed.ineed.Helpers.DownloadImageTask;
+import co.erwan.ineed.ineed.Models.Group;
+import co.erwan.ineed.ineed.Models.User;
 
 /**
  * Created by erwanmartin on 15/12/2014.
  */
-public class SelectGroupsActivity extends Activity {
-
-    private static final String TAG = MainFragment.class.getSimpleName();
+public class SelectGroupsActivity extends Application {
 
     private ArrayList<Group> groups;
     private GroupListAdapter groupsAdapter;
     private ListView groupsList;
-    private UserActions userActions;
-    private User currentUser;
     private ArrayList<Group> selectedGroups;
-
-    private RequestQueue mVolleyRequestQueue;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +51,8 @@ public class SelectGroupsActivity extends Activity {
         groups = new ArrayList<Group>();
         selectedGroups = new ArrayList<Group>();
 
-        mVolleyRequestQueue = Volley.newRequestQueue(this);
-        mVolleyRequestQueue.start();
-
         setContentView(R.layout.activity_select_groups);
 
-        userActions = new UserActions(this);
         groupsList = (ListView) findViewById(R.id.groups_list);
 
         groupsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -162,6 +149,12 @@ public class SelectGroupsActivity extends Activity {
                 // TODO Auto-generated method stub
                 Log.d("createUser", response.toString());
 
+                ParsePush.subscribeInBackground("user_" + currentUser.getId());
+
+                for (Group g : selectedGroups) {
+                    ParsePush.subscribeInBackground("group_" + g.getId());
+                }
+
                 Intent listNeedsActivity = new Intent(SelectGroupsActivity.this, ListNeedsActivity.class);
                 startActivity(listNeedsActivity);
             }
@@ -186,11 +179,6 @@ public class SelectGroupsActivity extends Activity {
             groupsAdapter = new GroupListAdapter(SelectGroupsActivity.this, groups);
             groupsList.setAdapter(groupsAdapter);
         } else {
-            //groupsAdapter.add(group);
-            //groupsAdapter = new GroupListAdapter(SelectGroupsActivity.this, groups.toArray(new Group[groups.size()]));
-            //groupsList.setAdapter(groupsAdapter);
-            //groupsAdapter.notifyDataSetChanged();
-
             ((GroupListAdapter) groupsAdapter).notifyDataSetChanged();
         }
     }
@@ -213,9 +201,6 @@ public class SelectGroupsActivity extends Activity {
                         GraphObject graphObject = response.getGraphObject();
 
                         Log.d("graphObjectGROUPS", response.toString());
-
-                        //GraphObjectList<GraphObject> data = graphObject.getPropertyAsList("data", GraphObject.class);
-                        //Log.d("Groups", data.toString());
 
                         FacebookRequestError error = response.getError();
 

@@ -1,22 +1,11 @@
 package co.erwan.ineed.ineed;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
 
-import com.facebook.FacebookRequestError;
-import com.facebook.HttpMethod;
-import com.facebook.Request;
-import com.facebook.Response;
-import com.facebook.Session;
-import com.facebook.model.GraphObject;
-import com.facebook.widget.LoginButton;
 import com.google.gson.Gson;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import co.erwan.ineed.ineed.Models.User;
 
 /**
  * Created by erwanmartin on 16/12/2014.

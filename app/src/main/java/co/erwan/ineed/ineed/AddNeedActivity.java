@@ -2,14 +2,12 @@ package co.erwan.ineed.ineed;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +17,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.parse.ParsePush;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,34 +25,26 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import co.erwan.ineed.ineed.Adapters.GroupListAdapter;
 import co.erwan.ineed.ineed.Helpers.DownloadImageTask;
+import co.erwan.ineed.ineed.Models.Group;
+import co.erwan.ineed.ineed.Models.User;
 
 /**
  * Created by erwanmartin on 17/12/2014.
  */
-public class AddNeedActivity extends Activity {
+public class AddNeedActivity extends Application {
 
-    private UserActions userActions;
-    private User currentUser;
     private ArrayList<Group> groups;
     private ArrayList<Group> selectedGroups;
     private GroupListAdapter groupsAdapter;
     private ListView groupsList;
 
-    private RequestQueue mVolleyRequestQueue;
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userActions = new UserActions(this);
-
-        mVolleyRequestQueue = Volley.newRequestQueue(this);
-        mVolleyRequestQueue.start();
-
         setContentView(R.layout.activity_add_need);
         groupsList = (ListView) findViewById(R.id.groups_list);
-
-        currentUser = userActions.getCurrentUser();
 
         selectedGroups = new ArrayList<Group>();
         groups = (ArrayList<Group>)currentUser.getSelectedGroups().clone();
@@ -148,6 +139,14 @@ public class AddNeedActivity extends Activity {
             public void onResponse(JSONObject response) {
                 // TODO Auto-generated method stub
                 Log.d("addNeedAPI", response.toString());
+
+                for (Group g : selectedGroups) {
+                    ParsePush push = new ParsePush();
+                    push.setChannel("group_" + g.getId());
+                    push.setMessage(currentUser.getFirstname() + " vient de poster une annonce dans " + g.getName());
+                    push.sendInBackground();
+                }
+
                 Toast.makeText(AddNeedActivity.this, "Votre annonce a été publiée", Toast.LENGTH_LONG).show();
                 Intent listNeedsActivity = new Intent(AddNeedActivity.this, ListNeedsActivity.class);
                 startActivity(listNeedsActivity);
