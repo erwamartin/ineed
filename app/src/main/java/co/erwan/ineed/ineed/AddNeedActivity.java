@@ -1,6 +1,5 @@
 package co.erwan.ineed.ineed;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
@@ -30,12 +27,11 @@ import java.util.ArrayList;
 import co.erwan.ineed.ineed.Adapters.GroupListAdapter;
 import co.erwan.ineed.ineed.Helpers.DownloadImageTask;
 import co.erwan.ineed.ineed.Models.Group;
-import co.erwan.ineed.ineed.Models.User;
 
 /**
  * Created by erwanmartin on 17/12/2014.
  */
-public class AddNeedActivity extends Application {
+public class AddNeedActivity extends Activity {
 
     private ArrayList<Group> groups;
     private ArrayList<Group> selectedGroups;
