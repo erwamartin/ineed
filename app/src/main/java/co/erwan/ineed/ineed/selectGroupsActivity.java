@@ -261,7 +261,7 @@ public class SelectGroupsActivity extends Application {
                                 try {
                                     JSONObject graphMember = jArray.getJSONObject(i);
 
-                                    usersOfGroup.add(new User(graphMember.getLong("id"), graphMember.getString("name")));
+                                    usersOfGroup.add(new User(graphMember.getString("id"), graphMember.getString("name")));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

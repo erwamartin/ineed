@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
@@ -47,6 +48,8 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
     protected ExpandableListView groupsList;
     private SwipeRefreshLayout swipeLayout;
 
+    private ImageButton addNeedButton;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -67,7 +70,7 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
         new DownloadImageTask(userPicture)
                 .execute(currentUser.getPicture());
 
-        ImageButton addNeedButton = (ImageButton)findViewById(R.id.add_need_button);
+        addNeedButton = (ImageButton)findViewById(R.id.add_need_button);
         addNeedButton.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -165,12 +168,10 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
                             for (int j = 0, lenj = jsonNeeds.length(); j < lenj; j++) {
                                 JSONObject jsonNeed = (JSONObject)jsonNeeds.get(j);
 
-                                User user = new User();
-
                                 Log.d("_this.getLocalClassName()", _this.getLocalClassName());
 
-                                if(_this.getLocalClassName().equals("ListNeedsActivity") || jsonNeed.getString("firstname").equals(currentUser.getFirstname())) {
-                                    user.setFirstname(jsonNeed.getString("firstname"));
+                                if(_this.getLocalClassName().equals("ListNeedsActivity") || jsonNeed.getString("idFb").equals(currentUser.getId().toString())) {
+                                    User user = new User(jsonNeed.getString("idFb"), jsonNeed.getString("firstname"));
                                     user.setPicture(jsonNeed.getString("picture"));
 
                                     Need newNeed = new Need(jsonNeed.getString("idItem"), jsonNeed.getString("message"), user);
@@ -216,7 +217,7 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
 
     }
 
-    public void removeNeed (final Group group, final Need need) {
+    public void removeNeed (final Group group, final Need need, final View view) {
 
         String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.remove_need);
         url = url.replace("{need_id}", need.getId());
@@ -226,7 +227,10 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
             public void onResponse(String response) {
                 // response
 
-                /*if (need.getUser().getId().toString().equals(currentUser.getId().toString())) {
+                Log.d("needUser", currentUser.getFirstname().toString());
+                Log.d("needUser", need.getUser().getFirstname().toString());
+
+                if (need.getUser().getId().toString().equals(currentUser.getId().toString())) {
                     Toast.makeText(ListNeedsActivity.this, "Annonce supprimée", Toast.LENGTH_LONG).show();
                 } else {
 
@@ -238,11 +242,16 @@ public class ListNeedsActivity extends Application implements SwipeRefreshLayout
 
                     String annonce = need.getUser().getFirstname() + " a été prévenu.";
                     Toast.makeText(ListNeedsActivity.this, annonce, Toast.LENGTH_LONG).show();
-                }*/
+                }
 
-                needs.get(group).remove(need);
-
-                ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        ImageButton removeButton = (ImageButton) view.findViewById(R.id.remove_button);
+                        removeButton.setSelected(false);
+                        needs.get(group).remove(need);
+                        ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
+                    }
+                }, 500);
             }
         }, new com.android.volley.Response.ErrorListener() {
 

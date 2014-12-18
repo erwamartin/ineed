@@ -119,7 +119,9 @@ public class GroupNeedListAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 if(context instanceof ListNeedsActivity){
-                    ((ListNeedsActivity)context).removeNeed(getGroup(groupPosition), getChild(groupPosition, childPosition));
+                    ImageButton removeButton = (ImageButton) v.findViewById(R.id.remove_button);
+                    removeButton.setSelected(true);
+                    ((ListNeedsActivity)context).removeNeed(getGroup(groupPosition), getChild(groupPosition, childPosition), v);
                 }
             }
 

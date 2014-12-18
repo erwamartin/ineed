@@ -66,13 +66,13 @@ public class FacebookConnectFragment extends Fragment {
         authButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
             public void onUserInfoFetched(GraphUser user) {
-                if (user != null) {
-                    Log.d("LOGIN", "You are currently logged in as " + user.getName());
-                    //_this.routeActivity();
-                    _this.getFbUserData();
-                } else {
-                    Log.d("LOGIN", "You are not logged in.");
-                }
+            if (user != null) {
+                Log.d("LOGIN", "You are currently logged in as " + user.getName());
+                //_this.routeActivity();
+                _this.getFbUserData();
+            } else {
+                Log.d("LOGIN", "You are not logged in.");
+            }
             }
         });
 
@@ -118,27 +118,6 @@ public class FacebookConnectFragment extends Fragment {
 
     }
 
-    private void routeActivity() {
-        /* TODO : Checker si l'utilisateur est nouveau */
-        //Intent intent = new Intent(getActivity(), SelectGroupsActivity.class);
-        //startActivity(intent);
-
-        /*JSONObject jsonParams = new JSONObject();
-
-        try {
-            JSONArray jsonUsers = new JSONArray();
-            JSONObject jsonUser = new JSONObject();
-
-            jsonUser.put("id","");
-
-            jsonParams.put("user", "Doe");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        createUser(jsonParams);*/
-    }
-
     protected void getFbUserData() {
         Session session = Session.getActiveSession();
 
@@ -162,7 +141,7 @@ public class FacebookConnectFragment extends Fragment {
 
                         if (error == null) {
 
-                            User newUser = new User(Long.parseLong(graphObject.getProperty("id").toString()), graphObject.getProperty("name").toString());
+                            User newUser = new User(graphObject.getProperty("id").toString(), graphObject.getProperty("name").toString());
                             newUser.setFirstname(graphObject.getProperty("first_name").toString());
 
                             JSONObject json_picture = (JSONObject) graphObject.getProperty("picture");

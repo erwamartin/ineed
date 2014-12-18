@@ -144,10 +144,9 @@ public class AddNeedActivity extends Application {
 
                 for (Group g : selectedGroups) {
                     ParsePush push = new ParsePush();
-                    //push.setChannel("group_" + g.getId());
                     ParseQuery pushQuery = ParseInstallation.getQuery();
                     pushQuery.whereEqualTo("channels", "group_" + g.getId());
-                    pushQuery.whereNotEqualTo("channels", "user_" + currentUser.getId());
+                    pushQuery.whereNotEqualTo("channels", "user_" + currentUser.getId().toString());
                     push.setQuery(pushQuery);
                     push.setMessage(currentUser.getFirstname() + " vient de poster une annonce dans " + g.getName());
                     push.sendInBackground();

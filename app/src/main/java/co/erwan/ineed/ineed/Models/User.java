@@ -9,8 +9,7 @@ import co.erwan.ineed.ineed.Models.Group;
  */
 public class User {
 
-    private Long id;
-    private String name;
+    private String id;
 
     private String firstname;
     private String picture;
@@ -19,22 +18,18 @@ public class User {
 
     public User() {}
 
-    public User(Long id, String name){
+    public User(String id, String firstname){
         this.id = id;
-        this.name = name;
+        this.firstname = firstname;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
-
-    public String getName() { return name; }
-
-    public void setName(String name) { this.name = name; }
 
     public String getFirstname() { return firstname; }
 
