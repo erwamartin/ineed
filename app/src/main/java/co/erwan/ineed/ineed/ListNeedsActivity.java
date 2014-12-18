@@ -46,15 +46,16 @@ import co.erwan.ineed.ineed.Helpers.DownloadImageTask;
 public class ListNeedsActivity extends Activity {
 
     private static final String TAG = MainFragment.class.getSimpleName();
+    protected Integer layout = R.layout.activity_list_needs;
 
-    private ArrayList<Group> groups;
-    private HashMap<Group, List<Need>> needs;
-    private GroupNeedListAdapter groupsAdapter;
-    private ExpandableListView groupsList;
-    private UserActions userActions;
-    private User currentUser;
+    protected ArrayList<Group> groups;
+    protected HashMap<Group, List<Need>> needs;
+    protected GroupNeedListAdapter groupsAdapter;
+    protected ExpandableListView groupsList;
+    protected UserActions userActions;
+    protected User currentUser;
 
-    private RequestQueue mVolleyRequestQueue;
+    protected RequestQueue mVolleyRequestQueue;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +69,7 @@ public class ListNeedsActivity extends Activity {
 
         userActions = new UserActions(this);
 
-        setContentView(R.layout.activity_list_needs);
+        setContentView(layout);
         groupsList = (ExpandableListView) findViewById(R.id.groupsList);
 
         currentUser = userActions.getCurrentUser();
@@ -79,7 +80,9 @@ public class ListNeedsActivity extends Activity {
         TextView user_firstname = (TextView) findViewById(R.id.user_firstname);
         user_firstname.setText(currentUser.getFirstname());
 
-        new DownloadImageTask((ImageView) findViewById(R.id.user_picture))
+        ImageView userPicture = (ImageView) findViewById(R.id.user_picture);
+
+        new DownloadImageTask(userPicture)
                 .execute(currentUser.getPicture());
 
         ImageButton addNeedButton = (ImageButton)findViewById(R.id.add_need_button);
@@ -94,11 +97,46 @@ public class ListNeedsActivity extends Activity {
 
         });
 
+        if(this.getLocalClassName().equals("ListNeedsActivity")) {
+            userPicture.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    goToProfile();
+                }
+            });
+
+            user_firstname.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    goToProfile();
+                }
+            });
+
+            TextView edit_needs = (TextView) findViewById(R.id.edit_needs);
+            edit_needs.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    goToProfile();
+                }
+            });
+        }
+
     }
 
-    private void getNeedsAPI () {
+    protected void goToProfile() {
+        Intent profileActivity = new Intent(ListNeedsActivity.this, ProfileActivity.class);
+        startActivity(profileActivity);
+
+        Toast.makeText(ListNeedsActivity.this, "Change", Toast.LENGTH_LONG).show();
+    }
+
+    protected void getNeedsAPI () {
         String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.get_user_needs);
         url = url.replace("{user_id}", currentUser.getId().toString());
+
+        final ListNeedsActivity _this = this;
+
+        Log.d("getNeedsAPI", _this.getLocalClassName());
 
         JsonArrayRequest createUserRequest = new JsonArrayRequest(url, new com.android.volley.Response.Listener<JSONArray>() {
 
@@ -132,11 +170,16 @@ public class ListNeedsActivity extends Activity {
                                 JSONObject jsonNeed = (JSONObject)jsonNeeds.get(j);
 
                                 User user = new User();
-                                user.setFirstname(jsonNeed.getString("firstname"));
-                                user.setPicture(jsonNeed.getString("picture"));
 
-                                Need newNeed = new Need(jsonNeed.getString("idItem"), jsonNeed.getString("message"), user);
-                                needList.add(newNeed);
+                                Log.d("_this.getLocalClassName()", _this.getLocalClassName());
+
+                                if(_this.getLocalClassName().equals("ListNeedsActivity") || jsonNeed.getString("firstname").equals(currentUser.getFirstname())) {
+                                    user.setFirstname(jsonNeed.getString("firstname"));
+                                    user.setPicture(jsonNeed.getString("picture"));
+
+                                    Need newNeed = new Need(jsonNeed.getString("idItem"), jsonNeed.getString("message"), user);
+                                    needList.add(newNeed);
+                                }
                             }
 
                             needs.put(newGroup, needList);
