@@ -162,4 +162,11 @@ public class AddNeedActivity extends Activity {
 
         mVolleyRequestQueue.add(createUserRequest);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent listNeedsActivity = new Intent(getApplicationContext(), ListNeedsActivity.class);
+        startActivity(listNeedsActivity);
+        finish();
+    }
 }

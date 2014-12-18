@@ -36,5 +36,12 @@ public class ProfileActivity extends ListNeedsActivity {
         layout = R.layout.activity_profile;
         super.onCreate(savedInstanceState);
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent listNeedsActivity = new Intent(getApplicationContext(), ListNeedsActivity.class);
+        startActivity(listNeedsActivity);
+        finish();
+    }
 }
 

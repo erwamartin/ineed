@@ -61,9 +61,10 @@ public class FacebookConnectFragment extends Fragment {
 
         final FacebookConnectFragment _this = this;
 
-        LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+        final LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
         authButton.setReadPermissions(Arrays.asList("user_groups"));
+
         authButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
             public void onUserInfoFetched(GraphUser user) {
@@ -72,7 +73,6 @@ public class FacebookConnectFragment extends Fragment {
                 _this.getFbUserData();
             } else {
                 Log.d("LOGIN", "You are not logged in.");
-                Toast.makeText(_this.getActivity(), "Une erreur s'est produite.", Toast.LENGTH_LONG).show();
             }
             }
         });

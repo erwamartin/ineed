@@ -74,6 +74,7 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
 
                 Intent addNeedActivity = new Intent(ListNeedsActivity.this, AddNeedActivity.class);
                 startActivity(addNeedActivity);
+                finish();
             }
 
         });
@@ -121,6 +122,7 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
     protected void goToProfile() {
         Intent profileActivity = new Intent(ListNeedsActivity.this, ProfileActivity.class);
         startActivity(profileActivity);
+        finish();
     }
 
     protected void getNeedsAPI () {
@@ -142,6 +144,7 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
 
                     Intent selectGroupsActivity = new Intent(getApplicationContext(), SelectGroupsActivity.class);
                     startActivity(selectGroupsActivity);
+                    finish();
 
                 } else {
                     Log.d("getNeedsAPI", "EXISTE");
@@ -273,6 +276,11 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
         });
 
         mVolleyRequestQueue.add(removeNeedRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 }
 

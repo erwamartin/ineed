@@ -1,5 +1,6 @@
 package co.erwan.ineed.ineed;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,18 +30,13 @@ public class ConnectionActivity extends FragmentActivity {
             System.out.println("DATA : xxxxx : " + mData);
             Log.d("GETEXTRAS", "DATA : xxxxx : " + mData);
             try {
-                JSONObject jsonData = new JSONObject(intent.getExtras().getString("com.parse.Data"));
-                String type = jsonData.getString("type");
+               if (intent.getExtras() != null) {
+                    JSONObject jsonData = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+                    String type = jsonData.getString("type");
 
-                if (type.equals("acceptation")) {
-                    String userId = jsonData.getString("user_id");
-
-                    try {
-                        getPackageManager().getPackageInfo("com.facebook.katana", 0);
-                        //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/" + userId)));
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + userId)));
-                    } catch (Exception e) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + userId)));
+                    if (type.equals("acceptation")) {
+                        String userId = jsonData.getString("user_id");
+                        startActivity(getOpenFacebookIntent(this, "https://www.facebook.com/" + userId));
                     }
                 }
 
@@ -60,6 +56,16 @@ public class ConnectionActivity extends FragmentActivity {
             // Or set the fragment from restored state info
             facebookConnectFragment = (FacebookConnectFragment) getSupportFragmentManager()
                     .findFragmentById(android.R.id.content);
+        }
+    }
+
+    public static Intent getOpenFacebookIntent(Context context, String url) {
+        try {
+            context.getPackageManager().getPackageInfo("com.facebook.katana", 0);
+            //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/" + userId)));
+            return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href="+ url));
+        } catch (Exception e) {
+            return new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         }
     }
 
