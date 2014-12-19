@@ -41,6 +41,8 @@ public class FacebookConnectFragment extends Fragment {
     private UserActions userActions;
     private User currentUser;
 
+    private LoginButton authButton;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,19 +63,20 @@ public class FacebookConnectFragment extends Fragment {
 
         final FacebookConnectFragment _this = this;
 
-        final LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
+        authButton = (LoginButton) view.findViewById(R.id.authButton);
         authButton.setFragment(this);
         authButton.setReadPermissions(Arrays.asList("user_groups"));
 
         authButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
             @Override
             public void onUserInfoFetched(GraphUser user) {
-            if (user != null) {
-                Log.d("LOGIN", "You are currently logged in as " + user.getName());
-                _this.getFbUserData();
-            } else {
-                Log.d("LOGIN", "You are not logged in.");
-            }
+                if (user != null) {
+                    Log.d("LOGIN", "You are currently logged in as " + user.getName());
+                    _this.getFbUserData();
+                } else {
+                    authButton.setVisibility(View.VISIBLE);
+                    Log.d("LOGIN", "You are not logged in.");
+                }
             }
         });
 

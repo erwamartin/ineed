@@ -21,7 +21,6 @@ public class Receiver extends ParsePushBroadcastReceiver {
 
     @Override
     public void onPushOpen(Context context, Intent intent) {
-        Log.e("Push", "Clicked");
         Intent i = new Intent(context, ConnectionActivity.class);
 
         Log.d("intent.getExtras()", intent.getExtras().toString());

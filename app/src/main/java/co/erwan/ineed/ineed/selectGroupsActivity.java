@@ -92,8 +92,6 @@ public class SelectGroupsActivity extends Activity {
     public void refreshUserData(){
         currentUser = userActions.getCurrentUser();
 
-        Log.d("current_user", currentUser.toString());
-
         TextView user_firstname = (TextView) findViewById(R.id.user_firstname);
         user_firstname.setText(currentUser.getFirstname());
 
@@ -129,7 +127,6 @@ public class SelectGroupsActivity extends Activity {
             jsonParams.put("group", jsonGroups);
 
             createUserAPI(jsonParams);
-            Log.d("jsonParams", jsonParams.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -143,7 +140,6 @@ public class SelectGroupsActivity extends Activity {
             @Override
             public void onResponse(JSONObject response) {
                 // TODO Auto-generated method stub
-                Log.d("createUser", response.toString());
 
                 ParsePush.subscribeInBackground("user_" + currentUser.getId());
 
@@ -159,7 +155,6 @@ public class SelectGroupsActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // TODO Auto-generated method stub
-                Log.d("createUser", error.toString());
                 Toast.makeText(SelectGroupsActivity.this, "Une erreur s'est produite.", Toast.LENGTH_LONG).show();
             }
         });
@@ -182,8 +177,6 @@ public class SelectGroupsActivity extends Activity {
     protected void getUserGroups() {
         Session session = Session.getActiveSession();
 
-        final SelectGroupsActivity _this = this;
-
         Bundle params = new Bundle();
         params.putString("fields", "groups{id,name,cover}");
 
@@ -195,8 +188,6 @@ public class SelectGroupsActivity extends Activity {
                 new Request.Callback() {
                     public JSONObject onCompleted(Response response) {
                         GraphObject graphObject = response.getGraphObject();
-
-                        Log.d("graphObjectGROUPS", response.toString());
 
                         FacebookRequestError error = response.getError();
 

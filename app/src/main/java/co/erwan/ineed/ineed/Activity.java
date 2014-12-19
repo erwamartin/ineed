@@ -18,6 +18,8 @@ public class Activity extends android.app.Activity {
     protected static final String TAG = FacebookConnectFragment.class.getSimpleName();
     private static Activity instance = new Activity();
 
+    protected Context context;
+
     protected UserActions userActions;
     protected User currentUser;
 
@@ -34,6 +36,8 @@ public class Activity extends android.app.Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = this;
 
         mVolleyRequestQueue = Volley.newRequestQueue(this);
         mVolleyRequestQueue.start();

@@ -1,5 +1,7 @@
 package co.erwan.ineed.ineed;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +39,8 @@ public class AddNeedActivity extends Activity {
     private ArrayList<Group> selectedGroups;
     private GroupListAdapter groupsAdapter;
     private ListView groupsList;
+
+    ProgressDialog progressDialog;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +111,6 @@ public class AddNeedActivity extends Activity {
                             jsonParams.put("group", jsonGroups);
 
                             addNeedAPI(jsonParams);
-                            Log.d("jsonParams", jsonParams.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -127,12 +130,14 @@ public class AddNeedActivity extends Activity {
     private void addNeedAPI (JSONObject params) {
         String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.add_need);
 
+        progressDialog = ProgressDialog.show(context, "Envoi en cours",
+                "Veuillez patienter", true);
+
         JsonObjectRequest createUserRequest = new JsonObjectRequest(com.android.volley.Request.Method.POST, url, params, new com.android.volley.Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 // TODO Auto-generated method stub
-                Log.d("addNeedAPI", response.toString());
 
                 for (Group g : selectedGroups) {
 
@@ -147,6 +152,9 @@ public class AddNeedActivity extends Activity {
                     push.sendInBackground();
                 }
 
+                // Hide loader
+                progressDialog.dismiss();
+
                 Toast.makeText(AddNeedActivity.this, "Votre annonce a été publiée", Toast.LENGTH_LONG).show();
                 Intent listNeedsActivity = new Intent(AddNeedActivity.this, ListNeedsActivity.class);
                 startActivity(listNeedsActivity);
@@ -156,7 +164,9 @@ public class AddNeedActivity extends Activity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // TODO Auto-generated method stub
-                Log.d("addNeedAPI", error.toString());
+
+                // Hide loader
+                progressDialog.dismiss();
             }
         });
 

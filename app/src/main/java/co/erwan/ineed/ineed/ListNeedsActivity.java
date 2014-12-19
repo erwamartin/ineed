@@ -1,5 +1,6 @@
 package co.erwan.ineed.ineed;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,6 +44,8 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
     protected GroupNeedListAdapter groupsAdapter;
     protected ExpandableListView groupsList;
     protected SwipeRefreshLayout swipeLayout;
+
+    ProgressDialog progressDialog;
 
     protected ImageButton addNeedButton;
 
@@ -110,11 +113,6 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-        /*new Handler().postDelayed(new Runnable() {
-            @Override public void run() {
-                swipeLayout.setRefreshing(false);
-            }
-        }, 5000);*/
         getNeedsAPI();
     }
 
@@ -129,26 +127,18 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
         String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.get_user_needs);
         url = url.replace("{user_id}", currentUser.getId().toString());
 
-        final ListNeedsActivity _this = this;
-
-        Log.d("getNeedsAPI", _this.getLocalClassName());
-
         JsonArrayRequest createUserRequest = new JsonArrayRequest(url, new com.android.volley.Response.Listener<JSONArray>() {
 
             @Override
             public void onResponse(JSONArray response) {
                 // TODO Auto-generated method stub
-                Log.d("getUser", response.toString());
                 if (response.length() == 0) {
-                    Log.d("createUser", "EXISTE PAS");
 
                     Intent selectGroupsActivity = new Intent(getApplicationContext(), SelectGroupsActivity.class);
                     startActivity(selectGroupsActivity);
                     finish();
 
                 } else {
-                    Log.d("getNeedsAPI", "EXISTE");
-
                     groups.clear();
                     needs = new HashMap<Group, List<Need>>();
 
@@ -166,9 +156,7 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
                             for (int j = 0, lenj = jsonNeeds.length(); j < lenj; j++) {
                                 JSONObject jsonNeed = (JSONObject)jsonNeeds.get(j);
 
-                                Log.d("_this.getLocalClassName()", _this.getLocalClassName());
-
-                                if(_this.getLocalClassName().equals("ListNeedsActivity") || jsonNeed.getString("idFb").equals(currentUser.getId().toString())) {
+                                if(getLocalClassName().equals("ListNeedsActivity") || jsonNeed.getString("idFb").equals(currentUser.getId().toString())) {
                                     User user = new User(jsonNeed.getString("idFb"), jsonNeed.getString("firstname"));
                                     user.setPicture(jsonNeed.getString("picture"));
 
@@ -185,15 +173,12 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
                     }
 
                     if (groupsAdapter == null) {
-                       Log.d("ROUPADAPTER", "groupsAdapter == null");
                         groupsAdapter = new GroupNeedListAdapter(ListNeedsActivity.this, groups, needs);
                         groupsList.setAdapter(groupsAdapter);
                     } else {
-                        Log.d("ROUPADAPTER", "groupsAdapter != null");
                         groupsAdapter = new GroupNeedListAdapter(ListNeedsActivity.this, groups, needs);
                         groupsList.setAdapter(groupsAdapter);
                         ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
-
                     }
 
                     for(int i=0, len = groupsAdapter.getGroupCount(); i < len ; i++)
@@ -202,7 +187,7 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
                     currentUser.setSelectedGroups(groups);
                     userActions.setCurrentUser(currentUser);
 
-                    if(_this.getLocalClassName().equals("ListNeedsActivity")) {
+                    if(getLocalClassName().equals("ListNeedsActivity")) {
                         swipeLayout.setRefreshing(false);
                     }
                 }
@@ -225,13 +210,15 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
         String url = this.getResources().getString(R.string.server_path) + this.getResources().getString(R.string.remove_need);
         url = url.replace("{need_id}", need.getId());
 
+        progressDialog = ProgressDialog.show(this, "Suppression en cours",
+                "Veuillez patienter", true);
+
         StringRequest removeNeedRequest = new StringRequest(com.android.volley.Request.Method.DELETE, url, new com.android.volley.Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                // response
 
-                Log.d("needUser", currentUser.getFirstname().toString());
-                Log.d("needUser", need.getUser().getFirstname().toString());
+                // Hide Loader
+                progressDialog.dismiss();
 
                 if (need.getUser().getId().toString().equals(currentUser.getId().toString())) {
                     Toast.makeText(ListNeedsActivity.this, "Annonce supprimée", Toast.LENGTH_LONG).show();
@@ -261,7 +248,7 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
                     @Override public void run() {
                         ImageButton removeButton = (ImageButton) view.findViewById(R.id.remove_button);
                         removeButton.setSelected(false);
-                        needs.get(group).remove(need);
+                        if (need != null) needs.get(group).remove(need);
                         ((GroupNeedListAdapter) groupsAdapter).notifyDataSetChanged();
                     }
                 }, 500);
@@ -271,7 +258,7 @@ public class ListNeedsActivity extends Activity implements SwipeRefreshLayout.On
             @Override
             public void onErrorResponse(VolleyError error) {
                 // TODO Auto-generated method stub
-                Log.d("removeNeedRequest", error.toString());
+                progressDialog.dismiss();
             }
         });
 

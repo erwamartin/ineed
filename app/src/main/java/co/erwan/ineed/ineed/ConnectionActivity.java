@@ -8,8 +8,11 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.facebook.AppEventsLogger;
+import com.facebook.Session;
+import com.facebook.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,10 +30,8 @@ public class ConnectionActivity extends FragmentActivity {
         Bundle mBundle = intent.getExtras();
         if (mBundle != null) {
             String mData = mBundle.getString("com.parse.Data");
-            System.out.println("DATA : xxxxx : " + mData);
-            Log.d("GETEXTRAS", "DATA : xxxxx : " + mData);
             try {
-               if (intent.getExtras() != null) {
+               if (intent.getExtras() != null && intent.getExtras().getString("com.parse.Data") != null) {
                     JSONObject jsonData = new JSONObject(intent.getExtras().getString("com.parse.Data"));
                     String type = jsonData.getString("type");
 
@@ -62,7 +63,6 @@ public class ConnectionActivity extends FragmentActivity {
     public static Intent getOpenFacebookIntent(Context context, String url) {
         try {
             context.getPackageManager().getPackageInfo("com.facebook.katana", 0);
-            //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/" + userId)));
             return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href="+ url));
         } catch (Exception e) {
             return new Intent(Intent.ACTION_VIEW, Uri.parse(url));
